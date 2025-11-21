@@ -1,0 +1,121 @@
+/* General Body Styling */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f0f2f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+/* Main Chat Container */
+.container {
+  width: 100%;
+  max-width: 600px;
+  height: 90vh;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+h1 {
+  font-size: 1.25rem;
+  padding: 16px;
+  margin: 0;
+  background-color: #007bff;
+  color: white;
+  text-align: center;
+}
+
+/* Chat Box Area */
+.chat-box {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #e5ddd5; /* WhatsApp-like background */
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Space between messages */
+}
+
+/* Base style for all chat messages (bubbles) */
+.chat-message {
+  padding: 10px 15px;
+  border-radius: 18px;
+  max-width: 70%;
+  word-wrap: break-word;
+  line-height: 1.4;
+}
+
+/* User's message bubble */
+.user-message {
+  background-color: #dcf8c6; /* Light green for user */
+  align-self: flex-end; /* Align to the right */
+  border-bottom-right-radius: 4px; /* WhatsApp style corner */
+}
+
+/* Bot's message bubble */
+.bot-message {
+  background-color: #ffffff; /* White for bot */
+  border-bottom-left-radius: 4px; /* WhatsApp style corner */
+  box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+}
+
+/* Chat Input Form */
+#chat-form {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+  background-color: #f0f2f5;
+}
+
+#user-input {
+  flex-grow: 1;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 10px 15px;
+  font-size: 1rem;
+}
+
+#chat-form button {
+  border-radius: 20px;
+  padding: 0 15px;
+  margin-left: 10px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+/* Container for bot message and copy button */
+.bot-message-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start; /* Align to the left */
+}
+
+/* Styling for the copy button */
+.copy-btn {
+  background-color: transparent;
+  border: 1px solid #ccc;
+  color: #555;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  opacity: 0.5; /* Slightly visible */
+  transition: opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+.bot-message-container:hover .copy-btn {
+  opacity: 1; /* Fully visible on hover */
+}
+
+.copy-btn:hover {
+  background-color: #f0f0f0;
+}
