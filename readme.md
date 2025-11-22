@@ -1,6 +1,20 @@
 # Gemini AI Chatbot
 
 A modern, feature-rich web-based chatbot powered by Google's Gemini AI, built with Node.js, Express, and vanilla JavaScript. This application provides an intuitive interface for interacting with AI, managing conversations, and handling file attachments.
+## Screenshot
+
+![Screenshot 1](screenshot/Screenshot 2025-11-22 at 18.51.26.png)
+
+![Screenshot 2](screenshot/Screenshot 2025-11-22 at 18.51.40.png)
+
+![Screenshot 3](screenshot/Screenshot 2025-11-22 at 18.52.14.png)
+
+![Screenshot 4](screenshot/Screenshot 2025-11-22 at 18.53.37.png)
+
+![Screenshot 5](screenshot/Screenshot 2025-11-22 at 18.53.50.png)
+
+![Screenshot 6](screenshot/Screenshot 2025-11-22 at 18.55.43.png)
+
 
 ## Features
 
@@ -77,6 +91,7 @@ The application uses the following npm packages:
    - Add your Gemini API key:
      ```
      GEMINI_API_KEY=your_api_key_here
+     GEMINI_MODEL=your_gemini_model
      ```
    - Optionally set a custom port:
      ```
