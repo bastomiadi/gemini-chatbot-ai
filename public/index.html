@@ -4,17 +4,108 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Gemini AI Chatbot</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <div class="container">
-    <h1>Gemini AI Chatbot</h1>
-    <div id="chat-box" class="chat-box"></div>
-    <form id="chat-form">
-      <input type="text" id="user-input" placeholder="Type your message..." autocomplete="off" required />
-      <button type="submit">Send</button>
-    </form>
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="user-status">
+        <span class="profile-icon"></span>
+        <div class="status-info">
+          <span id="user-name">User</span>
+          <span>Online</span>
+          <span id="online-time">0m</span>
+        </div>
+      </div>
+      <button id="new-chat-btn" class="new-chat-btn">New Chat</button>
+      <h2>Chat History</h2>
+      <div class="history-controls">
+        <button id="select-all-btn" class="control-btn" title="Select All"><i class="fas fa-check-square"></i></button>
+        <button id="delete-selected-btn" class="control-btn" title="Delete Selected"><i class="fas fa-trash-alt"></i></button>
+        <button id="clear-all-btn" class="control-btn" title="Clear All History"><i class="fas fa-broom"></i></button>
+      </div>
+    </div>
+    <ul id="history-list" class="history-list">
+    </ul>
   </div>
+  <!-- Login Screen -->
+  <div id="login-screen" class="login-screen">
+    <div class="login-container">
+      <h2><i class="fas fa-user-circle"></i> Welcome to Gemini AI Chatbot</h2>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="user-name-input">Enter your name:</label>
+          <input type="text" id="user-name-input" required>
+        </div>
+        <div class="form-group">
+          <label for="avatar-select">Choose avatar:</label>
+          <select id="avatar-select">
+            <option value="👤">👤 Default</option>
+            <option value="😊">😊 Smile</option>
+            <option value="🤓">🤓 Nerd</option>
+            <option value="🧑">🧑 Person</option>
+          </select>
+          <label>Or upload your own:</label>
+          <input type="file" id="avatar-upload" accept="image/*">
+        </div>
+        <button type="submit"><i class="fas fa-sign-in-alt"></i> Start Chatting</button>
+      </form>
+      <div id="file-list"></div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="container">
+      <div class="header">
+        <div class="title-section">
+          <i class="fas fa-robot title-icon"></i>
+          <div class="title-text">
+            <h1>Gemini AI Chatbot</h1>
+            <p>Powered by Advanced AI Technology</p>
+          </div>
+        </div>
+        <div class="header-buttons">
+          <button id="theme-toggle-btn" class="header-btn" title="Toggle Theme"><i class="fas fa-sun"></i></button>
+          <button id="clear-chat-btn" class="header-btn" title="Clear Chat"><i class="fas fa-trash"></i></button>
+          <button id="logout-btn" class="header-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+      </div>
+      <div id="welcome-screen" class="welcome-screen">
+        <i class="fas fa-robot welcome-icon"></i>
+        <h2>No conversations yet</h2>
+        <p>Start a conversation by typing a message below.</p>
+      </div>
+      <div id="chat-box" class="chat-box"></div>
+      <div id="file-list"></div>
+      <form id="chat-form">
+        <input type="file" id="file-input" multiple style="display: none;" />
+        <button type="button" id="add-file-btn" class="add-file-btn"><i class="fas fa-paperclip"></i></button>
+        <input type="text" id="user-input" placeholder="Type your message..." autocomplete="off" required autofocus />
+        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+        <div class="form-copyright">© 2025 Bastomi Adi Nugroho</div>
+      </form>
+    </div>
+    <div class="main-footer">
+      <p>&copy; 2025 Bastomi Adi Nugroho</p>
+    </div>
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div id="confirm-modal" class="modal">
+    <div class="modal-content">
+      <i class="fas fa-exclamation-triangle modal-icon"></i>
+      <p id="confirm-message">Are you sure?</p>
+      <div class="modal-buttons">
+        <button id="confirm-yes"><i class="fas fa-check btn-icon"></i> Yes</button>
+        <button id="confirm-no"><i class="fas fa-times btn-icon"></i> No</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"><i class="fas fa-check toast-icon"></i> <span id="toast-message"></span></div>
+
   <script src="script.js"></script>
 </body>
 </html>
