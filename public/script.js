@@ -47,15 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loginScreen.style.display = 'none';
   }
 
-  // Function to read file as data URL
-  function readFileContent(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  }
+  // (readFileContent defined later with support for text/image/video/audio/other)
 
   // Login form
   loginForm.addEventListener('submit', async (e) => {
@@ -279,34 +271,130 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   const fileList = document.getElementById('file-list');
+  // hide on initial load if no attachments
+  if (!attachedFiles || attachedFiles.length === 0) fileList.style.display = 'none';
 
   function updateFileList() {
     fileList.innerHTML = '';
     if (attachedFiles.length === 0) {
-      fileList.innerHTML = '<span class="no-files">No files selected</span>';
+      // hide the file-list container when empty
+      fileList.style.display = 'none';
+      return;
     } else {
+      // ensure visible when files exist
+      fileList.style.display = 'flex';
       attachedFiles.forEach((file, index) => {
         const fileItem = document.createElement('div');
         fileItem.classList.add('file-item');
-        fileItem.innerHTML = `
-          <span>${file.name}</span>
-          <button class="remove-file-btn" data-index="${index}"><i class="fas fa-times"></i></button>
-        `;
+
+        // create thumbnail for images
+        let thumbEl = null;
+        if (file.type.startsWith('image/')) {
+          thumbEl = document.createElement('img');
+          thumbEl.src = URL.createObjectURL(file);
+          thumbEl.alt = file.name;
+          thumbEl.style.maxWidth = '48px';
+          thumbEl.style.maxHeight = '48px';
+          thumbEl.style.marginRight = '8px';
+          thumbEl.style.borderRadius = '6px';
+          thumbEl.style.objectFit = 'cover';
+        }
+
+        const info = document.createElement('div');
+        info.style.flex = '1';
+        info.style.overflow = 'hidden';
+        info.style.textOverflow = 'ellipsis';
+        info.style.whiteSpace = 'nowrap';
+        const title = document.createElement('div');
+        title.style.fontWeight = '600';
+        title.textContent = file.name;
+        const size = document.createElement('div');
+        size.style.fontSize = '0.8rem';
+        size.style.color = '#666';
+        size.textContent = `${(file.size / 1024).toFixed(1)} KB`;
+        info.appendChild(title);
+        info.appendChild(size);
+
+        const controls = document.createElement('div');
+        controls.style.marginLeft = '8px';
+        controls.style.display = 'flex';
+        controls.style.gap = '6px';
+        controls.style.alignItems = 'center';
+
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'remove-file-btn';
+        removeBtn.dataset.index = index;
+        removeBtn.title = 'Remove';
+        removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+        controls.appendChild(removeBtn);
+
+        // assemble file item
+        const wrapper = document.createElement('div');
+        wrapper.style.display = 'flex';
+        wrapper.style.alignItems = 'center';
+        wrapper.style.gap = '8px';
+        wrapper.style.width = '100%';
+        if (thumbEl) wrapper.appendChild(thumbEl);
+        wrapper.appendChild(info);
+        wrapper.appendChild(controls);
+
+        fileItem.appendChild(wrapper);
         fileList.appendChild(fileItem);
+
+        // attach click handler to remove button
+        removeBtn.addEventListener('click', (ev) => {
+          ev.stopPropagation();
+          const idx = parseInt(removeBtn.dataset.index, 10);
+          if (!isNaN(idx)) {
+            attachedFiles.splice(idx, 1);
+            updateFileList();
+          }
+        });
+      });
+
+  // Add 'Add more' control at the end
+      const addMoreWrap = document.createElement('div');
+      addMoreWrap.style.marginTop = '8px';
+      const addMoreBtn = document.createElement('button');
+      addMoreBtn.type = 'button';
+      addMoreBtn.id = 'add-more-files';
+      addMoreBtn.className = 'add-file-btn';
+      addMoreBtn.style.padding = '6px 10px';
+      addMoreBtn.style.fontSize = '0.9rem';
+      addMoreBtn.innerHTML = '<i class="fas fa-plus"></i> Add more';
+      addMoreWrap.appendChild(addMoreBtn);
+      fileList.appendChild(addMoreWrap);
+
+      addMoreBtn.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        fileInput.click();
       });
     }
   }
 
   fileInput.addEventListener('change', (e) => {
-    attachedFiles = Array.from(e.target.files);
+    const newFiles = Array.from(e.target.files);
+    // Append new files, avoiding duplicates by name+size
+    newFiles.forEach(f => {
+      const exists = attachedFiles.some(af => af.name === f.name && af.size === f.size && af.lastModified === f.lastModified);
+      if (!exists) attachedFiles.push(f);
+    });
     updateFileList();
+    // clear input so same file can be reselected later
+    fileInput.value = '';
   });
 
   fileList.addEventListener('click', (e) => {
     if (e.target.closest('.remove-file-btn')) {
-      const index = e.target.closest('.remove-file-btn').dataset.index;
-      attachedFiles.splice(index, 1);
-      updateFileList();
+      const index = parseInt(e.target.closest('.remove-file-btn').dataset.index, 10);
+      if (!isNaN(index)) {
+        attachedFiles.splice(index, 1);
+        updateFileList();
+      }
+    }
+    if (e.target.closest('#add-more-files')) {
+      fileInput.click();
     }
   });
 
@@ -343,8 +431,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const fileContents = await Promise.all(attachedFiles.map(readFileContent));
       const fileTexts = attachedFiles.map((file, i) => `\n--- File: ${file.name} ---\n${fileContents[i]}`);
       fullMessage += fileTexts.join('\n');
-      attachedFiles = [];
-      fileInput.value = '';
     }
 
     const msgTime = Date.now();
@@ -509,7 +595,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateOnlineTime() {
     const elapsed = Date.now() - startTime;
     const minutes = Math.floor(elapsed / 60000);
-    document.getElementById('online-time').textContent = `${minutes}m`;
+    document.getElementById('online-time').textContent = `${minutes} min`;
   }
 
   setInterval(updateOnlineTime, 60000); // Update every minute

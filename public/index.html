@@ -14,11 +14,11 @@
         <span class="profile-icon"></span>
         <div class="status-info">
           <span id="user-name">User</span>
-          <span>Online</span>
-          <span id="online-time">0m</span>
+          <span><i class="fas fa-circle online-indicator"></i> Online</span>
+          <span id="online-time">0 min</span>
         </div>
       </div>
-      <button id="new-chat-btn" class="new-chat-btn">New Chat</button>
+      <button id="new-chat-btn" class="new-chat-btn"><i class="fas fa-plus"></i> New Chat</button>
       <h2>Chat History</h2>
       <div class="history-controls">
         <button id="select-all-btn" class="control-btn" title="Select All"><i class="fas fa-check-square"></i></button>
@@ -32,7 +32,8 @@
   <!-- Login Screen -->
   <div id="login-screen" class="login-screen">
     <div class="login-container">
-      <h2><i class="fas fa-user-circle"></i> Welcome to Gemini AI Chatbot</h2>
+      <div class="login-icon"><i class="fas fa-user"></i></div>
+      <h2>Welcome to Gemini AI Chatbot</h2>
       <form id="login-form">
         <div class="form-group">
           <label for="user-name-input">Enter your name:</label>
@@ -51,7 +52,6 @@
         </div>
         <button type="submit"><i class="fas fa-sign-in-alt"></i> Start Chatting</button>
       </form>
-      <div id="file-list"></div>
     </div>
   </div>
 
@@ -83,7 +83,6 @@
         <button type="button" id="add-file-btn" class="add-file-btn"><i class="fas fa-paperclip"></i></button>
         <input type="text" id="user-input" placeholder="Type your message..." autocomplete="off" required autofocus />
         <button type="submit"><i class="fas fa-paper-plane"></i></button>
-        <div class="form-copyright">© 2025 Bastomi Adi Nugroho</div>
       </form>
     </div>
     <div class="main-footer">
