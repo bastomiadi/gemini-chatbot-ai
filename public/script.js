@@ -32,7 +32,26 @@ document.addEventListener('DOMContentLoaded', () => {
   // Function to update user display
   function updateUserDisplay(user) {
     document.getElementById('user-name').textContent = user.name;
-    document.querySelector('.profile-icon').textContent = user.avatar;
+    
+    const profileIcon = document.querySelector('.profile-icon');
+    profileIcon.innerHTML = ''; // Clear existing content
+    
+    // Check if avatar is an uploaded image (data URL) or emoji
+    if (user.avatar.startsWith('data:image/')) {
+      // Create image element for uploaded avatar
+      const img = document.createElement('img');
+      img.src = user.avatar;
+      img.alt = `${user.name}'s avatar`;
+      img.style.width = '100%';
+      img.style.height = '100%';
+      img.style.borderRadius = '50%';
+      img.style.objectFit = 'cover';
+      profileIcon.appendChild(img);
+    } else {
+      // Display emoji avatar
+      profileIcon.textContent = user.avatar;
+    }
+    
     document.querySelector('.welcome-screen h2').textContent = `Welcome to Gemini AI Chatbot, ${user.name}!`;
   }
 
@@ -99,17 +118,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Theme
-  const isDark = localStorage.getItem('theme') === 'dark';
+  // Theme - Using sessionStorage for session-persistent theme
+  const isDark = sessionStorage.getItem('theme') === 'dark';
   if (isDark) {
     document.body.classList.add('dark-mode');
-    themeToggle.checked = true;
+    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+  } else {
+    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
   }
 
   themeToggle.addEventListener('click', () => {
     document.body.classList.toggle('dark-mode');
     const isDark = document.body.classList.contains('dark-mode');
     themeToggle.innerHTML = isDark ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+    // Save theme preference to sessionStorage
+    sessionStorage.setItem('theme', isDark ? 'dark' : 'light');
   });
 
   // Load history
@@ -213,7 +236,25 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       welcome.style.display = 'none';
       chats[id].messages.forEach(msg => {
-        addMessageToChatbox(msg.sender, msg.text, msg.timestamp);
+        const messageContainer = addMessageToChatbox(msg.sender, msg.text, msg.timestamp);
+        
+        // Mark edited messages
+        if (msg.sender === 'user' && msg.edited) {
+          if (messageContainer && messageContainer.querySelector) {
+            const messageElement = messageContainer.querySelector('.chat-message');
+            if (messageElement) {
+              messageElement.dataset.edited = 'true';
+              
+              // Update timestamp to show edited indicator
+              const timeElement = messageElement.querySelector('.message-time');
+              if (timeElement) {
+                const originalTime = msg.timestamp;
+                const timeText = new Date(originalTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                timeElement.textContent = timeText + ' • Edited';
+              }
+            }
+          }
+        }
       });
     }
     loadHistory(); // Update active highlight
@@ -283,6 +324,52 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       // ensure visible when files exist
       fileList.style.display = 'flex';
+      
+      // Add close button at top-right
+      const closeBtn = document.createElement('button');
+      closeBtn.type = 'button';
+      closeBtn.className = 'close-file-list-btn';
+      closeBtn.title = 'Close and clear all files';
+      closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+      closeBtn.style.position = 'absolute';
+      closeBtn.style.top = '8px';
+      closeBtn.style.right = '8px';
+      closeBtn.style.zIndex = '10';
+      closeBtn.style.backgroundColor = 'rgba(220, 53, 69, 0.8)';
+      closeBtn.style.color = 'white';
+      closeBtn.style.border = 'none';
+      closeBtn.style.borderRadius = '50%';
+      closeBtn.style.width = '24px';
+      closeBtn.style.height = '24px';
+      closeBtn.style.display = 'flex';
+      closeBtn.style.alignItems = 'center';
+      closeBtn.style.justifyContent = 'center';
+      closeBtn.style.cursor = 'pointer';
+      closeBtn.style.fontSize = '0.8rem';
+      closeBtn.style.backdropFilter = 'blur(5px)';
+      closeBtn.style.transition = 'all 0.2s ease';
+      
+      closeBtn.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        attachedFiles = [];
+        fileInput.value = '';
+        updateFileList();
+        showToast('All file attachments cleared');
+      });
+      
+      fileList.appendChild(closeBtn);
+      
+      // Add hover effect for close button
+      closeBtn.addEventListener('mouseenter', () => {
+        closeBtn.style.backgroundColor = 'rgba(220, 53, 69, 1)';
+        closeBtn.style.transform = 'scale(1.1)';
+      });
+      
+      closeBtn.addEventListener('mouseleave', () => {
+        closeBtn.style.backgroundColor = 'rgba(220, 53, 69, 0.8)';
+        closeBtn.style.transform = 'scale(1)';
+      });
+      
       attachedFiles.forEach((file, index) => {
         const fileItem = document.createElement('div');
         fileItem.classList.add('file-item');
@@ -335,6 +422,8 @@ document.addEventListener('DOMContentLoaded', () => {
         wrapper.style.alignItems = 'center';
         wrapper.style.gap = '8px';
         wrapper.style.width = '100%';
+        wrapper.style.position = 'relative';
+        wrapper.style.paddingRight = '32px'; // Space for close button
         if (thumbEl) wrapper.appendChild(thumbEl);
         wrapper.appendChild(info);
         wrapper.appendChild(controls);
@@ -353,9 +442,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       });
 
-  // Add 'Add more' control at the end
+      // Add 'Add more' control at the end
       const addMoreWrap = document.createElement('div');
       addMoreWrap.style.marginTop = '8px';
+      addMoreWrap.style.position = 'relative';
+      addMoreWrap.style.paddingRight = '32px'; // Space for close button
       const addMoreBtn = document.createElement('button');
       addMoreBtn.type = 'button';
       addMoreBtn.id = 'add-more-files';
@@ -536,7 +627,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (timestamp) {
       const timeElement = document.createElement('span');
       timeElement.classList.add('message-time');
-      timeElement.textContent = new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      
+      // Check if this is an edited message by looking at the message data
+      let timeText = new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      
+      // If this is a user message and has been edited, add edited indicator
+      if (sender === 'user' && messageElement.dataset && messageElement.dataset.edited === 'true') {
+        timeText += ' • Edited';
+      }
+      
+      timeElement.textContent = timeText;
       messageElement.appendChild(timeElement);
     }
 
@@ -550,7 +650,22 @@ document.addEventListener('DOMContentLoaded', () => {
       avatar.classList.add(`${sender}-avatar`);
       if (sender === 'user') {
         const user = JSON.parse(sessionStorage.getItem('user'));
-        avatar.textContent = user ? user.avatar : '👤';
+        const userAvatar = user ? user.avatar : '👤';
+        
+        if (userAvatar.startsWith('data:image/')) {
+          // Create image element for uploaded avatar
+          const img = document.createElement('img');
+          img.src = userAvatar;
+          img.alt = `${user.name}'s avatar`;
+          img.style.width = '100%';
+          img.style.height = '100%';
+          img.style.borderRadius = '50%';
+          img.style.objectFit = 'cover';
+          avatar.appendChild(img);
+        } else {
+          // Display emoji avatar
+          avatar.textContent = userAvatar;
+        }
       } else {
         const icon = document.createElement('i');
         icon.className = 'fas fa-robot';
@@ -583,6 +698,21 @@ document.addEventListener('DOMContentLoaded', () => {
           navigator.clipboard.writeText(message);
         });
         messageElement.appendChild(copyButton);
+
+        // Add edit button for user messages only (not thinking messages)
+        if (sender === 'user') {
+          const editButton = document.createElement('button');
+          editButton.classList.add('edit-btn');
+          editButton.classList.add('edit-btn-left');
+          const editIcon = document.createElement('i');
+          editIcon.className = 'fas fa-edit';
+          editButton.appendChild(editIcon);
+          editButton.title = 'Edit Message';
+          editButton.addEventListener('click', () => {
+            startEditMessage(messageElement, message, timestamp, container);
+          });
+          messageElement.appendChild(editButton);
+        }
       }
       messageContainer = container;
     }
@@ -596,6 +726,215 @@ document.addEventListener('DOMContentLoaded', () => {
     const elapsed = Date.now() - startTime;
     const minutes = Math.floor(elapsed / 60000);
     document.getElementById('online-time').textContent = `${minutes} min`;
+  }
+
+  // Function to start editing a message
+  function startEditMessage(messageElement, originalMessage, messageTimestamp, messageContainer) {
+    // Hide buttons during edit
+    const copyBtn = messageElement.querySelector('.copy-btn');
+    const editBtn = messageElement.querySelector('.edit-btn');
+    if (copyBtn) copyBtn.style.display = 'none';
+    if (editBtn) editBtn.style.display = 'none';
+
+    // Create edit input
+    const editInput = document.createElement('textarea');
+    editInput.value = originalMessage;
+    editInput.classList.add('message-edit-input');
+    
+    // Create edit buttons container
+    const editButtons = document.createElement('div');
+    editButtons.classList.add('edit-buttons');
+
+    // Create save button
+    const saveBtn = document.createElement('button');
+    saveBtn.classList.add('edit-save-btn');
+    saveBtn.innerHTML = '<i class="fas fa-check"></i> Save';
+    
+    // Create cancel button
+    const cancelBtn = document.createElement('button');
+    cancelBtn.classList.add('edit-cancel-btn');
+    cancelBtn.innerHTML = '<i class="fas fa-times"></i> Cancel';
+
+    // Handle save
+    saveBtn.addEventListener('click', () => {
+      const newMessage = editInput.value.trim();
+      if (newMessage && newMessage !== originalMessage) {
+        // Update the message content
+        messageElement.innerHTML = formatMessage(newMessage);
+        
+        // Mark message as edited in DOM
+        messageElement.dataset.edited = 'true';
+        
+        // Update timestamp and add edited indicator
+        const timeElement = document.createElement('span');
+        timeElement.classList.add('message-time');
+        timeElement.textContent = `${new Date(messageTimestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • Edited`;
+        messageElement.appendChild(timeElement);
+
+        // Restore buttons
+        if (copyBtn) {
+          copyBtn.style.display = 'inline-flex';
+          messageElement.appendChild(copyBtn);
+        }
+        if (editBtn) {
+          editBtn.style.display = 'inline-flex';
+          messageElement.appendChild(editBtn);
+        }
+
+        // Update chat history
+        updateChatHistory(messageTimestamp, newMessage);
+        
+        // Remove edit UI
+        messageElement.removeChild(editInput);
+        messageElement.removeChild(editButtons);
+        
+        showToast('Message updated! Processing new response...');
+        
+        // Process the edited message for new AI response
+        processEditedMessage(newMessage, messageTimestamp);
+      } else if (newMessage === originalMessage) {
+        // No changes made, just cancel
+        cancelEdit();
+      }
+    });
+
+    // Handle cancel
+    cancelBtn.addEventListener('click', () => {
+      cancelEdit();
+    });
+
+    // Handle Enter key to save (with Ctrl/Cmd)
+    editInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+        saveBtn.click();
+      } else if (e.key === 'Escape') {
+        cancelEdit();
+      }
+    });
+
+    // Function to cancel edit
+    function cancelEdit() {
+      // Restore buttons
+      if (copyBtn) {
+        copyBtn.style.display = 'inline-flex';
+        messageElement.appendChild(copyBtn);
+      }
+      if (editBtn) {
+        editBtn.style.display = 'inline-flex';
+        messageElement.appendChild(editBtn);
+      }
+
+      // Remove edit UI
+      messageElement.removeChild(editInput);
+      messageElement.removeChild(editButtons);
+    }
+
+    editButtons.appendChild(saveBtn);
+    editButtons.appendChild(cancelBtn);
+
+    // Add edit UI to message
+    messageElement.appendChild(editInput);
+    messageElement.appendChild(editButtons);
+
+    // Focus and select the input
+    editInput.focus();
+    editInput.select();
+  }
+
+  // Function to update chat history when message is edited
+  function updateChatHistory(messageTimestamp, newMessage) {
+    if (currentChatId && chats[currentChatId]) {
+      const messageIndex = chats[currentChatId].messages.findIndex(msg => msg.timestamp === messageTimestamp);
+      if (messageIndex !== -1) {
+        chats[currentChatId].messages[messageIndex].text = newMessage;
+        chats[currentChatId].messages[messageIndex].edited = true;
+        chats[currentChatId].messages[messageIndex].editTimestamp = Date.now();
+        localStorage.setItem('chats', JSON.stringify(chats));
+      }
+    }
+  }
+
+  // Function to process edited message for new AI response
+  async function processEditedMessage(editedMessage, messageTimestamp) {
+    try {
+      // Find the index of the edited message
+      const editedIndex = chats[currentChatId].messages.findIndex(msg => msg.timestamp === messageTimestamp);
+
+      if (editedIndex === -1) return; // Should not happen
+
+      // Filter messages to remove bot responses after the edited message
+      const filteredMessages = [];
+      for (let i = 0; i < chats[currentChatId].messages.length; i++) {
+        if (i <= editedIndex || chats[currentChatId].messages[i].sender !== 'bot') {
+          filteredMessages.push(chats[currentChatId].messages[i]);
+        }
+      }
+
+      // Clear chat display and reload filtered messages
+      chatBox.innerHTML = '';
+      filteredMessages.forEach(msg => {
+        const messageContainer = addMessageToChatbox(msg.sender, msg.text, msg.timestamp);
+
+        // Mark edited messages
+        if (msg.sender === 'user' && msg.edited) {
+          if (messageContainer && messageContainer.querySelector) {
+            const messageElement = messageContainer.querySelector('.chat-message');
+            if (messageElement) {
+              messageElement.dataset.edited = 'true';
+
+              // Update timestamp to show edited indicator
+              const timeElement = messageElement.querySelector('.message-time');
+              if (timeElement) {
+                const originalTime = msg.timestamp;
+                const timeText = new Date(originalTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                timeElement.textContent = timeText + ' • Edited';
+              }
+            }
+          }
+        }
+      });
+
+      // Show thinking indicator
+      const thinkingMessage = addMessageToChatbox('bot', '<i class="fas fa-brain thinking-icon"></i> Thinking<span class="dots"></span>');
+
+      // Clear any attached files before sending
+      attachedFiles = [];
+      fileInput.value = '';
+      updateFileList();
+
+      // Prepare form data for API request with the filtered conversation
+      const formData = new FormData();
+      formData.append('conversation', JSON.stringify(filteredMessages));
+
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      thinkingMessage.remove();
+
+      if (data.result) {
+        const msgTime = Date.now();
+        addMessageToChatbox('bot', data.result, msgTime);
+        // Update the messages array: keep filtered + new bot response
+        chats[currentChatId].messages = [...filteredMessages, { sender: 'bot', text: data.result, timestamp: msgTime }];
+        chats[currentChatId].timestamp = msgTime;
+        localStorage.setItem('chats', JSON.stringify(chats));
+        showToast('New response generated for edited message!');
+      } else {
+        addMessageToChatbox('bot', 'Sorry, no response received from the AI.');
+      }
+
+    } catch (error) {
+      addMessageToChatbox('bot', `Error processing edited message: ${error.message || 'Failed to get response from server.'}`);
+      console.error('Error processing edited message:', error);
+      showToast('Failed to process edited message');
+    }
   }
 
   setInterval(updateOnlineTime, 60000); // Update every minute

@@ -1,23 +1,47 @@
-/* General Body Styling */
+/* Enhanced General Body Styling */
 html {
   height: 100%;
 }
-/* General Body Styling */
+/* Enhanced General Body Styling with Better Gradients */
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background-color: #f0f2f5;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
   display: flex;
   height: 100vh;
-/* Sidebar Styling */
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced gradient animation */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+/* Enhanced Sidebar Styling with Glass Morphism */
 .sidebar {
   width: 300px;
-  background-color: rgba(248, 249, 250, 0.9);
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(248, 249, 250, 0.85);
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   flex-direction: column;
   position: relative;
   height: 100vh;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: 
+    4px 0 20px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar:hover {
+  box-shadow: 
+    6px 0 25px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .sidebar-header {
@@ -36,21 +60,47 @@ body {
   margin-bottom: 10px;
 }
 
+/* Enhanced Control Buttons with Glass Morphism */
 .control-btn {
-  background: rgba(255, 255, 255, 0.8);
-  border: none;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   color: #555;
-  padding: 5px 8px;
-  border-radius: 6px;
+  padding: 6px 10px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 0.9rem;
-  backdrop-filter: blur(5px);
-  transition: background-color 0.2s;
+  backdrop-filter: blur(10px) saturate(180%);
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.control-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.control-btn:hover::before {
+  left: 100%;
 }
 
 .control-btn:hover {
-  background-color: rgba(255, 255, 255, 1);
+  background-color: rgba(255, 255, 255, 0.95);
   color: #007bff;
+  transform: translateY(-1px);
+  box-shadow: 
+    0 4px 16px rgba(0, 123, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  border-color: rgba(0, 123, 255, 0.3);
 }
 
 .history-list {
@@ -72,39 +122,113 @@ body {
   padding: 0 16px 20px 16px;
 }
 
+/* Enhanced History Items with Advanced Glass Morphism */
 .history-item {
-  padding: 10px 18px;
-  cursor: pointer;
-  border-radius: 12px;
-  margin-bottom: 5px;
-  background-color: #fff;
-  border: 1px solid #e9ecef;
-  display: flex;
-  align-items: center;
-  backdrop-filter: blur(5px);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+   padding: 12px 20px 35px 20px; /* Extra bottom padding for buttons */
+   cursor: pointer;
+   border-radius: 12px; /* Fully rounded like buttons */
+   margin-bottom: 12px;
+   background: rgba(255, 255, 255, 0.8);
+   border: 1px solid rgba(255, 255, 255, 0.3);
+   border-left: none; /* Remove left border for cleaner look */
+   border-right: none; /* Remove right border for cleaner look */
+   display: flex;
+   align-items: center;
+   position: relative; /* Needed for absolute positioning of buttons */
+   backdrop-filter: blur(15px) saturate(180%);
+   box-shadow:
+     0 4px 16px rgba(0, 0, 0, 0.08),
+     0 1px 0 rgba(255, 255, 255, 0.4),
+     inset 0 1px 0 rgba(255, 255, 255, 0.2);
+   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+   overflow: hidden;
 }
 
-.history-item .control-btn + .control-btn {
-  margin-left: 5px;
+.history-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+}
+
+.history-item:hover {
+  background: rgba(255, 255, 255, 0.95);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 8px 25px rgba(0, 0, 0, 0.15),
+    0 2px 0 rgba(255, 255, 255, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border-color: rgba(0, 123, 255, 0.2);
+}
+
+.history-item.active {
+   background: rgba(0, 123, 255, 0.15);
+   border-color: #007bff;
+   border-radius: 12px;
+   box-shadow:
+     0 4px 16px rgba(0, 123, 255, 0.3),
+     inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.history-item .control-btn {
+  position: absolute;
+  bottom: 12px; /* Floating just above the bottom edge */
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #555;
+  padding: 4px 6px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.8rem;
+  backdrop-filter: blur(5px);
+  transition: all 0.2s ease;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.history-item .control-btn:hover {
+  background-color: rgba(255, 255, 255, 1);
+  color: #007bff;
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Position duplicate button (clone icon) */
+.history-item .control-btn[title="Duplicate"] {
+  right: 35px; /* Position from right edge */
+}
+
+/* Position delete button (trash icon) */
+.history-item .control-btn[title="Delete"] {
+  right: 8px; /* Position closer to right edge */
 }
 
 .history-checkbox {
   appearance: none;
   background: rgba(255, 255, 255, 0.8);
-  border: none;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   width: 20px;
   height: 20px;
   border-radius: 6px;
   cursor: pointer;
-  margin-right: 10px;
   backdrop-filter: blur(5px);
   transition: background-color 0.2s;
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 10;
 }
 
 .history-checkbox:checked {
   background-color: #007bff;
-  position: relative;
+  border-color: #007bff;
 }
 
 .history-checkbox:checked::after {
@@ -115,6 +239,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  font-weight: bold;
 }
 
 .history-item:hover {
@@ -128,7 +253,8 @@ body {
 
 .history-content {
   flex: 1;
-  padding-left: 10px;
+  padding-left: 35px; /* Space for checkbox at top-left */
+  padding-top: 5px; /* Small top padding to account for checkbox */
 }
 
 .history-timestamp {
@@ -169,33 +295,84 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-}
   margin: 0;
 }
 
-/* Main Chat Container */
+/* Enhanced Main Chat Container with Glass Morphism */
 .container {
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.9);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  position: relative;
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+   width: 100%;
+   height: 100%;
+   background: rgba(255, 255, 255, 0.85);
+   display: flex;
+   flex-direction: column;
+   overflow: hidden;
+   position: relative;
+   backdrop-filter: blur(20px) saturate(180%);
+   border-radius: 20px 20px 0 0; /* Only top corners rounded */
+   border: 1px solid rgba(255, 255, 255, 0.3);
+   border-bottom: none; /* Remove bottom border for cleaner look */
+   box-shadow:
+     0 8px 30px rgba(0, 0, 0, 0.15),
+     inset 0 1px 0 rgba(255, 255, 255, 0.4);
+   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  z-index: 1;
+}
+
+/* Enhanced Header with Advanced Gradients */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px;
-  background-color: #007bff;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 50%, #004085 100%);
+  background-size: 200% 200%;
+  animation: headerGradientShift 8s ease infinite;
   color: white;
   z-index: 10;
   position: relative;
+  box-shadow: 
+    0 4px 30px rgba(0, 123, 255, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  border-radius: 20px 20px 0 0; /* Only top corners rounded */
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+  animation: headerShimmer 3s ease-in-out infinite;
+  z-index: 1;
+}
+
+@keyframes headerGradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes headerShimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.header > * {
+  position: relative;
+  z-index: 2;
 }
 
 .title-section {
@@ -227,33 +404,100 @@ body {
 }
 
 
+/* Enhanced Header Buttons with Advanced Effects */
 .header-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
-  padding: 8px 12px;
-  border-radius: 12px;
-  cursor: pointer;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  font-size: 1.2rem;
+   background: rgba(255, 255, 255, 0.15);
+   border: 1px solid rgba(255, 255, 255, 0.3);
+   color: white;
+   padding: 12px 16px;
+   border-radius: 14px;
+   cursor: pointer;
+   backdrop-filter: blur(15px) saturate(180%);
+   box-shadow:
+     0 4px 15px rgba(0, 0, 0, 0.2),
+     inset 0 1px 0 rgba(255, 255, 255, 0.3);
+   font-size: 1.3rem;
+   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+   position: relative;
+   overflow: hidden;
+}
+
+.dark-mode .header-btn {
+   background: rgba(255, 255, 255, 0.1);
+   border: 1px solid rgba(255, 255, 255, 0.2);
+   color: white;
+   backdrop-filter: blur(15px) saturate(180%);
+   box-shadow:
+     0 4px 15px rgba(0, 0, 0, 0.3),
+     inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.header-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
+}
+
+.header-btn:hover::before {
+  width: 100%;
+  height: 100%;
 }
 
 .header-btn:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-  transform: scale(1.1);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  background-color: rgba(255, 255, 255, 0.25);
+  transform: scale(1.1) translateY(-2px);
+  box-shadow: 
+    0 8px 25px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(255, 255, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
-/* Chat Box Area */
+/* Enhanced Chat Box Area with Advanced Gradients */
 .chat-box {
   flex-grow: 1;
-  padding: 20px;
+  padding: 24px;
   overflow-y: auto;
-  background-color: #e5ddd5; /* WhatsApp-like background */
+  background: linear-gradient(135deg, #f8f5f0 0%, #ede4d3 50%, #e6d7c3 100%);
+  background-size: 400% 400%;
+  animation: chatBoxGradient 20s ease infinite;
   display: flex;
   flex-direction: column;
-  gap: 12px; /* Space between messages */
+  gap: 16px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.chat-box::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chat-box::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.chat-box::-webkit-scrollbar-thumb {
+  background: rgba(0, 123, 255, 0.3);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.chat-box::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 123, 255, 0.5);
+}
+
+@keyframes chatBoxGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 /* User Status */
@@ -274,6 +518,14 @@ body {
   justify-content: center;
   color: white;
   font-size: 1.2rem;
+  overflow: hidden;
+}
+
+.profile-icon img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .status-info {
@@ -297,31 +549,107 @@ body {
   font-size: 0.9rem;
 }
 
-/* Dark Mode Styles */
+/* Enhanced Dark Mode Styles */
 .dark-mode {
-  background-color: #121212;
+  background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+  background-size: 400% 400%;
+  animation: gradientShiftDark 15s ease infinite;
   color: #ffffff;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark mode gradient animation */
+@keyframes gradientShiftDark {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .dark-mode .sidebar {
-  background-color: #1e1e1e;
-  border-right: 1px solid #333;
-  color: #fff;
+   background: rgba(20, 20, 30, 0.85);
+   border-right: 1px solid rgba(255, 255, 255, 0.1);
+   border-left: 1px solid rgba(255, 255, 255, 0.05);
+   color: #fff;
+   box-shadow:
+     6px 0 25px rgba(0, 0, 0, 0.4),
+     0 0 30px rgba(0, 123, 255, 0.08),
+     inset 0 1px 0 rgba(255, 255, 255, 0.1),
+     inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+   backdrop-filter: blur(20px) saturate(180%);
+}
+
+.dark-mode .sidebar:hover {
+  box-shadow: 
+    8px 0 30px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .dark-mode .sidebar h2 {
   color: #fff;
 }
 
+.dark-mode .control-btn {
+   background: rgba(45, 45, 55, 0.7);
+   border: 1px solid rgba(255, 255, 255, 0.1);
+   color: #ccc;
+   backdrop-filter: blur(10px) saturate(180%);
+   box-shadow:
+     0 2px 8px rgba(0, 0, 0, 0.3),
+     inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .control-btn::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+}
+
+.dark-mode .control-btn:hover {
+  background-color: rgba(55, 55, 65, 0.95);
+  color: #007bff;
+  box-shadow: 
+    0 4px 16px rgba(0, 123, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-color: rgba(0, 123, 255, 0.4);
+}
+
 .dark-mode .history-item {
-  background-color: #2a2a2a;
-  border: 1px solid #444;
+  background: rgba(35, 35, 45, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   color: #fff;
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px) saturate(180%);
+}
+
+.dark-mode .history-item::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+}
+
+.dark-mode .history-item:hover {
+   background: rgba(45, 45, 55, 0.95);
+   transform: translateY(-2px);
+   box-shadow:
+     0 8px 25px rgba(0, 0, 0, 0.4),
+     0 2px 0 rgba(255, 255, 255, 0.15),
+     inset 0 1px 0 rgba(255, 255, 255, 0.1);
+   border-color: rgba(0, 123, 255, 0.3);
 }
 
 .dark-mode .history-item.active {
-  background-color: #1e3a5f;
-  border-color: #007bff;
+   background: rgba(0, 123, 255, 0.15);
+   border-color: rgba(0, 123, 255, 0.5);
+   border-radius: 12px;
+   box-shadow:
+     0 4px 16px rgba(0, 123, 255, 0.3),
+     inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .history-item.active {
+   background-color: #1e3a5f;
+   border-color: #007bff;
+   border-radius: 12px;
 }
 
 .dark-mode .history-item:hover {
@@ -329,7 +657,9 @@ body {
 }
 
 .dark-mode .new-chat-btn {
-  background-color: #007bff;
+   background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+   backdrop-filter: blur(5px);
+   box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
 }
 
 .dark-mode .new-chat-btn:hover {
@@ -337,45 +667,200 @@ body {
 }
 
 .dark-mode .container {
-  background-color: #1e1e1e;
+   background: rgba(20, 20, 30, 0.85);
+   border: 1px solid rgba(255, 255, 255, 0.1);
+   box-shadow:
+     0 8px 30px rgba(0, 0, 0, 0.4),
+     0 0 20px rgba(0, 123, 255, 0.1),
+     inset 0 1px 0 rgba(255, 255, 255, 0.1),
+     inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+   backdrop-filter: blur(20px) saturate(180%);
 }
 
 .dark-mode .header {
-  background-color: #333;
+   background: linear-gradient(135deg, #2c3e50 0%, #34495e 50%, #2c3e50 100%);
+   background-size: 200% 200%;
+   animation: headerGradientShift 8s ease infinite;
+   box-shadow:
+     0 4px 30px rgba(0, 0, 0, 0.5),
+     inset 0 1px 0 rgba(255, 255, 255, 0.1);
+   backdrop-filter: blur(20px) saturate(180%);
 }
 
 .dark-mode .chat-box {
-  background-color: #0a0a0a;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f1419 100%);
+  background-size: 400% 400%;
+  animation: chatBoxGradientDark 20s ease infinite;
+}
+
+.dark-mode .chat-box::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dark-mode .chat-box::-webkit-scrollbar-thumb {
+  background: rgba(0, 123, 255, 0.4);
+}
+
+.dark-mode .chat-box::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 123, 255, 0.6);
+}
+
+@keyframes chatBoxGradientDark {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.dark-mode .chat-message {
+  backdrop-filter: blur(15px);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .dark-mode .user-message {
-  background-color: #007bff;
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 50%, #004085 100%);
+  background-size: 200% 200%;
+  animation: userMessageGradientDark 3s ease infinite;
+  box-shadow: 
+    0 4px 16px rgba(0, 123, 255, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-color: rgba(0, 123, 255, 0.4);
+}
+
+@keyframes userMessageGradientDark {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .dark-mode .bot-message {
-  background-color: #2a2a2a;
+  background: linear-gradient(135deg, #2a2a3a 0%, #3a3a4a 50%, #2a2a3a 100%);
+  background-size: 200% 200%;
+  animation: botMessageGradientDark 4s ease infinite;
   color: #fff;
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
+@keyframes botMessageGradientDark {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Enhanced Dark Mode Styles for Copy and Edit Buttons */
 .dark-mode .copy-btn {
-  background-color: transparent;
-  border: 1px solid #ccc;
-  color: #ccc;
+   background: rgba(45, 45, 55, 0.8);
+   border: 1px solid rgba(255, 255, 255, 0.1);
+   color: #ccc;
+   backdrop-filter: blur(10px) saturate(180%);
+   box-shadow:
+     0 2px 8px rgba(0, 0, 0, 0.3),
+     inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .copy-btn::before {
+  background: rgba(0, 123, 255, 0.3);
 }
 
 .dark-mode .copy-btn:hover {
-  background-color: #444;
+  background-color: rgba(55, 55, 65, 0.95);
+  color: #007bff;
+  box-shadow: 
+    0 4px 12px rgba(0, 123, 255, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-color: rgba(0, 123, 255, 0.4);
+}
+
+.dark-mode .bot-message .copy-btn {
+  background: rgba(45, 45, 55, 0.8);
+  color: #ccc;
+}
+
+.dark-mode .edit-btn {
+   background: rgba(45, 45, 55, 0.8);
+   border: 1px solid rgba(255, 255, 255, 0.1);
+   color: #ccc;
+   backdrop-filter: blur(10px) saturate(180%);
+   box-shadow:
+     0 2px 8px rgba(0, 0, 0, 0.3),
+     inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .edit-btn::before {
+  background: rgba(40, 167, 69, 0.3);
+}
+
+.dark-mode .edit-btn:hover {
+  background-color: rgba(55, 55, 65, 0.95);
+  color: #28a745;
+  box-shadow: 
+    0 4px 12px rgba(40, 167, 69, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-color: rgba(40, 167, 69, 0.4);
+}
+
+.dark-mode .copy-btn-left {
+  margin-right: 2px;
+}
+
+.dark-mode .message-edit-input {
+  background-color: rgba(42, 42, 42, 0.9);
+  border-color: #007bff;
+  color: #fff;
+}
+
+.dark-mode .message-edit-input:focus {
+  border-color: #0056b3;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+.dark-mode .edit-save-btn {
+  background-color: #28a745;
+}
+
+.dark-mode .edit-save-btn:hover {
+  background-color: #218838;
+}
+
+.dark-mode .edit-cancel-btn {
+  background-color: #6c757d;
+}
+
+.dark-mode .edit-cancel-btn:hover {
+  background-color: #5a6268;
 }
 
 .dark-mode #chat-form {
-  background-color: #1e1e1e;
-  border-top: 1px solid #333;
+   background: rgba(20, 20, 30, 0.9);
+   border-top: 1px solid rgba(255, 255, 255, 0.1);
+   box-shadow:
+     0 -8px 32px rgba(0, 0, 0, 0.3),
+     inset 0 1px 0 rgba(255, 255, 255, 0.1);
+   backdrop-filter: blur(20px) saturate(180%);
 }
 
 .dark-mode #user-input {
-  background-color: #2a2a2a;
-  border: 1px solid #444;
+  background: rgba(35, 35, 45, 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.1);
   color: #fff;
+  box-shadow: 
+    inset 0 2px 8px rgba(0, 0, 0, 0.3),
+    0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode #user-input:focus {
+  border-color: #007bff;
+  box-shadow: 
+    inset 0 2px 8px rgba(0, 0, 0, 0.3),
+    0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 0 3px rgba(0, 123, 255, 0.2);
+  background: rgba(45, 45, 55, 0.95);
+}
+
+.dark-mode #user-input::placeholder {
+  color: #aaa;
 }
 
 .dark-mode #chat-form button {
@@ -390,10 +875,24 @@ body {
   background-color: #218838;
 }
 
+.dark-mode .close-file-list-btn {
+  background-color: rgba(248, 113, 113, 0.8) !important;
+  color: white !important;
+}
+
+.dark-mode .close-file-list-btn:hover {
+  background-color: rgba(248, 113, 113, 1) !important;
+}
+
+.dark-mode #file-list {
+  background-color: rgba(42, 42, 42, 0.9) !important;
+}
+
 .dark-mode .profile-icon {
   background-color: #007bff;
 }
 
+/* Additional Dark Mode Enhancements */
 .dark-mode .status-info span {
   color: #fff;
 }
@@ -402,12 +901,58 @@ body {
   color: #ccc;
 }
 
-.dark-mode .delete-btn {
+.dark-mode .sidebar h2 {
+  color: #fff;
+}
+
+.dark-mode .no-chats {
   color: #ccc;
 }
 
-.dark-mode .delete-btn:hover {
-  color: #f00;
+.dark-mode .new-chat-btn {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+
+.dark-mode .new-chat-btn:hover {
+  background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+  box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+}
+
+/* Enhanced message time styling */
+.message-time {
+  font-size: 0.75rem;
+  color: #666;
+  margin-top: 8px;
+  display: block;
+  text-align: right;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.user-message .message-time {
+  text-align: right;
+}
+
+.bot-message .message-time {
+  text-align: left;
+}
+
+.dark-mode .message-time {
+  color: #999;
+}
+
+/* Dark mode styles for repositioned history control buttons */
+.dark-mode .history-item .control-btn {
+  background: rgba(42, 42, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ccc;
+}
+
+.dark-mode .history-item .control-btn:hover {
+  background-color: rgba(55, 55, 55, 1);
+  color: #007bff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Login Screen */
@@ -417,24 +962,36 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 2000;
   animation: fadeIn 0.5s ease-in-out;
+  backdrop-filter: blur(5px);
+}
+
+.dark-mode .login-screen {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.dark-mode .login-container {
+  background: rgba(45, 45, 45, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
 .login-container {
-  background-color: #fff;
+  background: rgba(255, 255, 255, 0.95);
   padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
   text-align: center;
   max-width: 400px;
   width: 90%;
   animation: slideIn 0.5s ease-in-out 0.2s both;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .login-icon {
@@ -471,20 +1028,35 @@ body {
 
 .form-group input, .form-group select {
   width: 100%;
-  padding: 12px 15px;
-  border: 2px solid #e1e5e9;
-  border-radius: 8px;
+  padding: 14px 16px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
   font-size: 1rem;
   box-sizing: border-box;
   transition: all 0.3s ease;
-  background-color: #f8f9fa;
+  background: rgba(248, 249, 250, 0.9);
+  backdrop-filter: blur(5px);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .form-group input:focus, .form-group select:focus {
   outline: none;
   border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15), inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.dark-mode .form-group input, .dark-mode .form-group select {
+  background: rgba(42, 42, 42, 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .form-group input:focus, .dark-mode .form-group select:focus {
+  border-color: #007bff;
+  background: rgba(55, 55, 55, 0.95);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .form-group input::placeholder {
@@ -523,23 +1095,27 @@ body {
 
 /* Welcome Screen */
 .welcome-screen {
-  display: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 60px; /* Leave space for the form */
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: #666;
-  z-index: 1;
+   display: none;
+   position: absolute;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 80px; /* Leave more space for the form */
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   text-align: center;
+   color: #666;
+   z-index: 1;
+   background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.1) 100%);
+   backdrop-filter: blur(10px) saturate(180%);
+   border-radius: 20px 20px 0 0;
 }
 
 .welcome-icon {
-  font-size: 4rem;
-  animation: bounce 2s infinite;
+   font-size: 4rem;
+   animation: bounce 2s infinite;
+   color: #007bff;
 }
 
 .welcome-screen h2 {
@@ -574,29 +1150,66 @@ body {
   to { transform: scale(1); opacity: 1; }
 }
 
-/* Toast Notification */
+/* Enhanced Toast Notification with Glass Morphism */
 .toast {
   position: fixed;
-  bottom: 20px;
+  bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #28a745;
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
   color: white;
-  padding: 15px 25px;
-  border-radius: 25px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  padding: 16px 28px;
+  border-radius: 50px;
+  box-shadow: 
+    0 8px 32px rgba(40, 167, 69, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
   z-index: 1001;
-  display: none;
-  font-weight: bold;
+  font-weight: 600;
   font-size: 1rem;
-  animation: slideUpFade 0.4s ease-in-out;
+  animation: slideUpFade 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  backdrop-filter: blur(15px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.toast::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: toastShimmer 2s ease-in-out infinite;
 }
 
 .toast-icon {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
+  animation: toastIconBounce 0.6s ease-out;
+}
+
+@keyframes toastShimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+@keyframes toastIconBounce {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.toast:hover {
+  transform: translateX(-50%) translateY(-5px);
+  box-shadow: 
+    0 12px 40px rgba(40, 167, 69, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 @keyframes slideUpFade {
@@ -620,17 +1233,18 @@ body {
 }
 
 .modal-content {
-  background-color: #fff;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 35px;
+  border-radius: 16px;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
   text-align: center;
   max-width: 400px;
   width: 90%;
   animation: slideIn 0.3s ease-in-out;
   font-size: 1.1rem;
   font-weight: bold;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .modal-icon {
@@ -680,39 +1294,85 @@ body {
 }
 
 .dark-mode .modal-content {
-  background-color: #333;
+  background: rgba(45, 45, 45, 0.95);
   color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
 }
 
 .dark-mode .welcome-screen {
-  color: #ccc;
+   color: #ccc;
+   background: linear-gradient(135deg, rgba(42, 42, 42, 0.1) 0%, rgba(20, 20, 30, 0.05) 50%, rgba(42, 42, 42, 0.1) 100%);
+   backdrop-filter: blur(10px) saturate(180%);
 }
 
 .dark-mode .welcome-screen h2 {
-  color: #fff;
+   color: #fff;
 }
-/* Base style for all chat messages (bubbles) */
+
+.dark-mode .welcome-icon {
+   color: #007bff;
+}
+/* Enhanced Base style for all chat messages (bubbles) */
 .chat-message {
-  padding: 10px 15px;
-  border-radius: 18px;
+  padding: 12px 18px;
+  border-radius: 20px;
   max-width: 70%;
   word-wrap: break-word;
-  line-height: 1.4;
+  line-height: 1.5;
   position: relative;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: messageSlideIn 0.4s ease-out;
 }
 
-/* User's message bubble */
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Enhanced User's message bubble */
 .user-message {
-  background-color: #dcf8c6; /* Light green for user */
-  align-self: flex-end; /* Align to the right */
-  border-bottom-right-radius: 4px; /* WhatsApp style corner */
+  background: linear-gradient(135deg, #dcf8c6 0%, #c8e6c9 50%, #b8e6c9 100%);
+  background-size: 200% 200%;
+  animation: userMessageGradient 3s ease infinite;
+  align-self: flex-end;
+  border-bottom-right-radius: 6px;
+  box-shadow: 
+    0 4px 16px rgba(76, 175, 80, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  border-color: rgba(76, 175, 80, 0.3);
 }
 
-/* Bot's message bubble */
+@keyframes userMessageGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Enhanced Bot's message bubble */
 .bot-message {
-  background-color: #ffffff; /* White for bot */
-  border-bottom-left-radius: 4px; /* WhatsApp style corner */
-  box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #f0f0f0 100%);
+  background-size: 200% 200%;
+  animation: botMessageGradient 4s ease infinite;
+  border-bottom-left-radius: 6px;
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  border-color: rgba(0, 0, 0, 0.05);
+}
+
+@keyframes botMessageGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .message-time {
@@ -731,24 +1391,50 @@ body {
   text-align: left;
 }
 
-/* Chat Input Form */
+/* Enhanced Chat Input Form with Glass Morphism */
 #chat-form {
   display: flex;
   align-items: center;
-  padding: 10px;
-  border-top: 1px solid #ddd;
-  background-color: #f0f2f5;
+  padding: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px) saturate(180%);
   position: relative;
+  box-shadow: 
+    0 -8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 0 0 20px 20px; /* Only bottom corners rounded */
 }
 
 #user-input {
   flex-grow: 1;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  padding: 10px 15px;
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  border-radius: 25px; /* Fully rounded for input field */
+  padding: 14px 20px;
   font-size: 1rem;
-  backdrop-filter: blur(5px);
-  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px) saturate(180%);
+  background: rgba(255, 255, 255, 0.9);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    inset 0 2px 8px rgba(0, 0, 0, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.6);
+  color: #333;
+}
+
+#user-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 
+    inset 0 2px 8px rgba(0, 0, 0, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.6),
+    0 0 0 3px rgba(0, 123, 255, 0.15);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+#user-input::placeholder {
+  color: #999;
+  font-style: italic;
 }
 
 #chat-form button {
@@ -788,10 +1474,24 @@ body {
   flex-wrap: wrap;
   gap: 10px;
   padding: 10px;
+  padding-top: 35px; /* Space for close button */
   background-color: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(5px);
   border-radius: 8px;
   margin-bottom: 10px;
+  position: relative;
+}
+
+.close-file-list-btn {
+  position: absolute !important;
+  top: 8px !important;
+  right: 8px !important;
+  z-index: 20 !important;
+}
+
+.close-file-list-btn:hover {
+  background-color: rgba(220, 53, 69, 1) !important;
+  transform: scale(1.1) !important;
 }
 
 /* Ensure file-list is on top of any welcome overlay and buttons accept clicks */
@@ -858,7 +1558,7 @@ body {
 .bot-message-container {
   display: flex;
   align-items: flex-end;
-  gap: 5px;
+  gap: 8px;
   align-self: flex-start; /* Align to the left */
 }
 
@@ -866,7 +1566,7 @@ body {
 .user-message-container {
   display: flex;
   align-items: flex-end;
-  gap: 0px;
+  gap: 8px;
   align-self: flex-end; /* Align to the right */
 }
 
@@ -874,58 +1574,256 @@ body {
   position: relative;
 }
 
+/* Enhanced Avatar Styling with Glow Effects */
 .user-avatar {
-  font-size: 2rem;
-  width: 50px;
-  height: 50px;
+  font-size: 1.5rem;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  background-color: #007bff;
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
   color: white;
+  box-shadow: 
+    0 4px 12px rgba(0, 123, 255, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: avatarPulse 3s ease-in-out infinite;
 }
 
 .bot-avatar {
-  font-size: 2rem;
-  width: 50px;
-  height: 50px;
+  font-size: 1.5rem;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  background-color: #28a745;
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
   color: white;
+  box-shadow: 
+    0 4px 12px rgba(40, 167, 69, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: avatarPulse 3s ease-in-out infinite 0.5s;
 }
 
-/* Styling for the copy button */
+@keyframes avatarPulse {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 
+      0 4px 12px rgba(0, 123, 255, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+  50% { 
+    transform: scale(1.05);
+    box-shadow: 
+      0 6px 20px rgba(0, 123, 255, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  }
+}
+
+.user-avatar:hover,
+.bot-avatar:hover {
+  transform: scale(1.1);
+  box-shadow: 
+    0 6px 20px rgba(0, 123, 255, 0.6),
+    0 0 20px rgba(0, 123, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Enhanced Copy and Edit Buttons with Glass Morphism */
 .copy-btn {
   background: rgba(255, 255, 255, 0.8);
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   color: #555;
   cursor: pointer;
-  padding: 5px 8px;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  backdrop-filter: blur(5px);
-  transition: background-color 0.2s;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  backdrop-filter: blur(10px) saturate(180%);
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
-.copy-btn-left {
-  float: left;
-  margin-right: 10px;
+.copy-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(0, 123, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
 }
 
-.bot-message .copy-btn {
-  float: right;
-  margin-left: 10px;
+.copy-btn:hover::before {
+  width: 100%;
+  height: 100%;
 }
 
 .copy-btn:hover {
   background-color: rgba(255, 255, 255, 1);
   color: #007bff;
+  transform: translateY(-1px);
+  box-shadow: 
+    0 4px 12px rgba(0, 123, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  border-color: rgba(0, 123, 255, 0.3);
+}
+
+.copy-btn-left {
+  float: left;
+  margin-left: 8px;
+  margin-bottom: 5px;
+}
+
+.bot-message .copy-btn {
+  float: right;
+  margin-right: 8px;
+  margin-bottom: 5px;
+}
+
+.edit-btn-left {
+  float: left;
+  margin-left: 4px;
+  margin-bottom: 5px;
+}
+
+/* Enhanced Edit button styling */
+.edit-btn {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #555;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  backdrop-filter: blur(10px) saturate(180%);
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-left: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.edit-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(40, 167, 69, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
+}
+
+.edit-btn:hover::before {
+  width: 100%;
+  height: 100%;
+}
+
+.edit-btn:hover {
+  background-color: rgba(255, 255, 255, 1);
+  color: #28a745;
+  transform: translateY(-1px);
+  box-shadow: 
+    0 4px 12px rgba(40, 167, 69, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  border-color: rgba(40, 167, 69, 0.3);
+}
+
+.copy-btn-left {
+  margin-right: 2px; /* Space between copy and edit buttons */
+}
+
+.copy-btn-left + .edit-btn-left {
+  margin-left: 2px; /* Spacing between the two buttons */
+}
+
+/* Message edit input */
+.message-edit-input {
+  width: 100%;
+  min-height: 60px;
+  max-height: 200px;
+  padding: 8px;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 8px;
+  backdrop-filter: blur(5px);
+}
+
+.message-edit-input:focus {
+  border-color: #0056b3;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+/* Edit buttons container */
+.edit-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.edit-save-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: background-color 0.2s;
+}
+
+.edit-save-btn:hover {
+  background-color: #218838;
+}
+
+.edit-cancel-btn {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: background-color 0.2s;
+}
+
+.edit-cancel-btn:hover {
+  background-color: #5a6268;
 }
 
 .btn-icon {
@@ -1025,23 +1923,32 @@ body {
 }
 
 .form-copyright {
-  /* keep it visually centered over the form controls */
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 5; /* ensure it sits above the input & buttons */
-  pointer-events: none; /* avoid blocking clicks on inputs/buttons */
-  font-size: 0.7rem;
-  color: #666;
-  font-weight: 500;
-  font-style: italic;
-  white-space: nowrap;
-  text-align: center;
+   /* keep it visually centered over the form controls */
+   position: absolute;
+   left: 50%;
+   top: 50%;
+   transform: translate(-50%, -50%);
+   z-index: 5; /* ensure it sits above the input & buttons */
+   pointer-events: none; /* avoid blocking clicks on inputs/buttons */
+   font-size: 0.7rem;
+   color: #666;
+   font-weight: 500;
+   font-style: italic;
+   white-space: nowrap;
+   text-align: center;
+   background: rgba(255, 255, 255, 0.8);
+   backdrop-filter: blur(10px) saturate(180%);
+   padding: 4px 8px;
+   border-radius: 12px;
+   border: 1px solid rgba(255, 255, 255, 0.3);
+   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .dark-mode .form-copyright {
-  color: #aaa;
+   color: #aaa;
+   background: rgba(42, 42, 42, 0.8);
+   border: 1px solid rgba(255, 255, 255, 0.1);
+   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .attachment {
@@ -1084,25 +1991,25 @@ body {
 
 /* Center main footer content */
 .main-footer {
-  margin-top: 0; /* remove extra gap so footer sits lower */
-  padding: 2px 8px; /* further reduce vertical space */
-  text-align: center;
-  color: #666;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Ensure footer background is white (not gray) */
-.main-footer {
-  background-color: #ffffff;
-  border-top: 1px solid rgba(0,0,0,0.04);
+   margin-top: 0; /* remove extra gap so footer sits lower */
+   padding: 2px 8px; /* further reduce vertical space */
+   text-align: center;
+   color: #666;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background: rgba(255, 255, 255, 0.9);
+   backdrop-filter: blur(10px) saturate(180%);
+   border-top: 1px solid rgba(255, 255, 255, 0.3);
+   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .dark-mode .main-footer {
-  background-color: #141414; /* dark background in dark mode */
-  color: #ccc;
-  border-top: 1px solid rgba(255,255,255,0.04);
+   background: rgba(20, 20, 30, 0.9);
+   color: #ccc;
+   backdrop-filter: blur(10px) saturate(180%);
+   border-top: 1px solid rgba(255, 255, 255, 0.1);
+   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 420px) {
