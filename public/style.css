@@ -1,16 +1,48 @@
+/* CSS Reset for Full Screen Layout */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 /* Enhanced General Body Styling */
 html {
   height: 100%;
+  /* Prevent layout shifts during modal interactions */
+  scrollbar-gutter: stable;
+  overscroll-behavior: none;
+  /* Remove any default margins/padding */
+  margin: 0;
+  padding: 0;
 }
 /* Enhanced General Body Styling with Better Gradients */
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: #f8f9fa; /* Default solid background */
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Prevent layout shifts during modal interactions */
+  scrollbar-gutter: stable;
+  overscroll-behavior: none;
+  /* Ensure consistent layout calculations */
+  contain: layout style;
+  /* Ensure full screen coverage */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+/* Optional gradient background - can be enabled/disabled */
+body.gradient-bg {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
   background-size: 400% 400%;
   animation: gradientShift 15s ease infinite;
-  display: flex;
-  height: 100vh;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Enhanced gradient animation */
@@ -28,7 +60,7 @@ body {
   display: flex;
   flex-direction: column;
   position: relative;
-  height: 100vh;
+  height: 100%;
   backdrop-filter: blur(20px) saturate(180%);
   box-shadow:
     4px 0 20px rgba(0, 0, 0, 0.1),
@@ -36,6 +68,9 @@ body {
     inset 0 -1px 0 rgba(255, 255, 255, 0.1);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   flex-shrink: 0; /* Prevent sidebar from shrinking */
+  /* Prevent layout shifts */
+  contain: layout style;
+  scrollbar-gutter: stable;
 }
 
 .sidebar:hover {
@@ -206,7 +241,7 @@ body {
 
 /* Position duplicate button (clone icon) */
 .history-item .control-btn[title="Duplicate"] {
-  right: 35px; /* Position from right edge */
+  right: 42px; /* Position from right edge with moderate gap */
 }
 
 /* Position delete button (trash icon) */
@@ -300,7 +335,9 @@ body {
   display: flex;
   flex-direction: column;
   margin: 0;
+  padding: 0;
   min-height: 0; /* Allow proper flex shrinking */
+  height: 100%;
   contain: layout; /* Isolate layout changes */
 }
 
@@ -314,14 +351,16 @@ body {
     overflow: hidden;
     position: relative;
     backdrop-filter: blur(20px) saturate(180%);
-    border-radius: 20px 20px 0 0; /* Only top corners rounded */
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-bottom: none; /* Remove bottom border for cleaner look */
+    border-radius: 0; /* Square corners */
+    border: none; /* Remove white border to eliminate visible edge */
     box-shadow:
       0 8px 30px rgba(0, 0, 0, 0.15),
       inset 0 1px 0 rgba(255, 255, 255, 0.4);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     min-height: 400px; /* Ensure minimum height to prevent excessive shrinking */
+    /* Prevent layout shifts */
+    contain: layout style;
+    will-change: auto;
 }
 
 /* Prevent layout shifts by ensuring consistent scrollbar space */
@@ -352,11 +391,11 @@ body {
   color: white;
   z-index: 10;
   position: relative;
-  box-shadow: 
+  box-shadow:
     0 4px 30px rgba(0, 123, 255, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   overflow: hidden;
-  border-radius: 20px 20px 0 0; /* Only top corners rounded */
+  border-radius: 0; /* Square corners */
 }
 
 .header::before {
@@ -569,11 +608,16 @@ body {
 
 /* Enhanced Dark Mode Styles */
 .dark-mode {
+  background: #1a1a1a; /* Default dark solid background */
+  color: #ffffff;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Optional gradient background for dark mode */
+.dark-mode.gradient-bg {
   background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
   background-size: 400% 400%;
   animation: gradientShiftDark 15s ease infinite;
-  color: #ffffff;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Dark mode gradient animation */
@@ -1014,6 +1058,9 @@ body {
   z-index: 2000;
   animation: fadeIn 0.5s ease-in-out;
   backdrop-filter: blur(5px);
+  /* Prevent layout shifts */
+  scrollbar-gutter: stable;
+  overscroll-behavior: none;
 }
 
 .dark-mode .login-screen {
@@ -1071,6 +1118,8 @@ body {
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   position: relative;
+  /* Smooth transitions for all properties */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .login-theme-toggle-btn {
@@ -1241,7 +1290,7 @@ body {
     z-index: 1;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.1) 100%);
     backdrop-filter: blur(10px) saturate(180%);
-    border-radius: 20px 20px 0 0;
+    border-radius: 0;
     transition: opacity 0.3s ease; /* Smooth fade transition instead of display toggle */
 }
 
@@ -1363,6 +1412,9 @@ body {
   justify-content: center;
   align-items: center;
   animation: fadeIn 0.3s ease-in-out;
+  /* Prevent layout shifts */
+  scrollbar-gutter: stable;
+  overscroll-behavior: none;
 }
 
 .modal-content {
@@ -1378,6 +1430,8 @@ body {
   font-weight: bold;
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.2);
+  /* Smooth transitions for all properties */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .modal-icon {
@@ -1539,7 +1593,7 @@ body {
     0 -8px 32px rgba(0, 0, 0, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.4);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 0 0 20px 20px; /* Only bottom corners rounded */
+  border-radius: 0; /* Square corners */
 }
 
 .form-controls {
@@ -2141,8 +2195,28 @@ body {
     white-space: nowrap;
 }
 
+.form-copyright a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.form-copyright a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
 .dark-mode .form-copyright {
     color: #aaa;
+}
+
+.dark-mode .form-copyright a {
+    color: #4dabf7;
+}
+
+.dark-mode .form-copyright a:hover {
+    color: #339af0;
 }
 
 .attachment {
@@ -2219,4 +2293,36 @@ body {
   margin: 0;
   font-size: 0.85rem;
   line-height: 1;
+}
+
+/* Prevent layout shifts during modal interactions */
+/* Ensure consistent scrollbar behavior */
+* {
+  box-sizing: border-box;
+}
+
+/* Prevent content shifts when modals appear/disappear */
+body.modal-open {
+  /* Maintain consistent layout when modals are visible */
+  overflow: hidden !important;
+  position: fixed !important;
+  width: 100% !important;
+  height: 100% !important;
+  /* Prevent any layout recalculations */
+  contain: layout style !important;
+  /* Smooth transition for modal state changes */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Smooth transitions for modal appearance */
+.login-screen,
+.modal {
+  /* Ensure smooth transitions without layout jumps */
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+  /* Prevent layout shifts during animations */
+  transform: translateZ(0);
+  /* Smooth opacity transitions */
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }

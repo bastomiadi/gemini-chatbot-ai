@@ -66,11 +66,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const user = JSON.parse(sessionStorage.getItem('user'));
   if (!user) {
     loginScreen.style.display = 'flex';
+    document.body.classList.add('modal-open');
     main.style.display = 'none';
   } else {
     updateUserDisplay(user);
     main.style.display = 'flex';
     loginScreen.style.display = 'none';
+    document.body.classList.remove('modal-open');
   }
 
   // (readFileContent defined later with support for text/image/video/audio/other)
@@ -90,6 +92,10 @@ document.addEventListener('DOMContentLoaded', () => {
     sessionStorage.setItem('user', JSON.stringify(userData));
     updateUserDisplay(userData);
     loginScreen.style.display = 'none';
+    // Smooth transition: delay removing modal-open class for better UX
+    setTimeout(() => {
+      document.body.classList.remove('modal-open');
+    }, 300);
     main.style.display = 'flex';
   });
 
@@ -97,6 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
   logoutBtn.addEventListener('click', () => {
     showConfirm('Are you sure you want to logout?', () => {
       sessionStorage.removeItem('user');
+      document.body.classList.remove('modal-open'); // Ensure modal-open is removed
       location.reload();
     });
   });
@@ -130,6 +137,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const savedTheme = sessionStorage.getItem('theme');
   const isDark = savedTheme === null ? true : savedTheme === 'dark';
 
+  // Background gradient preference - default to enabled
+  const gradientEnabled = sessionStorage.getItem('gradientEnabled') !== 'false';
+
   if (isDark) {
     document.body.classList.add('dark-mode');
     themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
@@ -137,6 +147,11 @@ document.addEventListener('DOMContentLoaded', () => {
   } else {
     themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
     loginThemeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+  }
+
+  // Apply gradient background if enabled
+  if (gradientEnabled) {
+    document.body.classList.add('gradient-bg');
   }
 
   themeToggle.addEventListener('click', () => {
@@ -296,12 +311,21 @@ document.addEventListener('DOMContentLoaded', () => {
   function showConfirm(message, onYes) {
     confirmMessage.textContent = message;
     confirmModal.style.display = 'flex';
+    document.body.classList.add('modal-open');
     confirmYes.onclick = () => {
       onYes();
       confirmModal.style.display = 'none';
+      // Smooth transition: delay removing modal-open class
+      setTimeout(() => {
+        document.body.classList.remove('modal-open');
+      }, 300);
     };
     confirmNo.onclick = () => {
       confirmModal.style.display = 'none';
+      // Smooth transition: delay removing modal-open class
+      setTimeout(() => {
+        document.body.classList.remove('modal-open');
+      }, 300);
     };
   }
 
