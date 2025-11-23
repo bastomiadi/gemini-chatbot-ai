@@ -15,7 +15,7 @@ const app = express();
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-1.5-flash'; // Default model
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash'; // Default model
 
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } }); // 10MB limit
 
