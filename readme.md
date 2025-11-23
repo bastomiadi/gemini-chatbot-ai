@@ -3,17 +3,29 @@
 A modern, feature-rich web-based chatbot powered by Google's Gemini AI, built with Node.js, Express, and vanilla JavaScript. This application provides an intuitive interface for interacting with AI, managing conversations, and handling file attachments.
 ## Screenshot
 
-![Screenshot 1](screenshot/screenshot_2025-11-22_18-51-26.png)
+### Application Interface
+<div align="center">
+  <img src="screenshot/Screenshot 2025-11-23 at 09.46.26.png" alt="Login Screen" width="45%" style="margin: 10px;"/>
+  <img src="screenshot/Screenshot 2025-11-23 at 09.47.05.png" alt="Main Chat Interface" width="45%" style="margin: 10px;"/>
+</div>
 
-![Screenshot 2](screenshot/screenshot_2025-11-22_18-51-40.png)
+### Chat Features
+<div align="center">
+  <img src="screenshot/Screenshot 2025-11-23 at 09.47.58.png" alt="Chat Interface with Messages" width="45%" style="margin: 10px;"/>
+  <img src="screenshot/Screenshot 2025-11-23 at 09.48.11.png" alt="File Attachment Feature" width="45%" style="margin: 10px;"/>
+</div>
 
-![Screenshot 3](screenshot/screenshot_2025-11-22_18-52-14.png)
+### Theme & UI Features
+<div align="center">
+  <img src="screenshot/Screenshot 2025-11-23 at 09.49.33.png" alt="Dark Mode Interface" width="45%" style="margin: 10px;"/>
+  <img src="screenshot/Screenshot 2025-11-23 at 10.12.06.png" alt="Theme Toggle in Login" width="45%" style="margin: 10px;"/>
+</div>
 
-![Screenshot 4](screenshot/screenshot_2025-11-22_18-53-37.png)
-
-![Screenshot 5](screenshot/screenshot_2025-11-22_18-53-50.png)
-
-![Screenshot 6](screenshot/screenshot_2025-11-22_18-55-43.png)
+### Advanced Features
+<div align="center">
+  <img src="screenshot/Screenshot 2025-11-23 at 10.13.27.png" alt="Chat History Management" width="45%" style="margin: 10px;"/>
+  <img src="screenshot/Screenshot 2025-11-23 at 10.16.12.png" alt="File Processing & Response" width="45%" style="margin: 10px;"/>
+</div>
 
 
 ## Features
@@ -38,19 +50,35 @@ A modern, feature-rich web-based chatbot powered by Google's Gemini AI, built wi
 - **Duplicate Chats**: Create copies of existing conversations
 
 ### User Interface
-- **Dark/Light Theme**: Toggle between themes with smooth animations
+- **Dark/Light Theme**: Toggle between themes with smooth animations (including login modal)
 - **Responsive Design**: Works on desktop and mobile devices
 - **Modern UI Elements**: Glassmorphism effects, rounded buttons, smooth transitions
-- **Font Awesome Icons**: Consistent iconography throughout the app
-- **Profile Management**: User avatars and status indicators
+- **Font Awesome Icons**: Consistent iconography throughout the app, including avatar selection
+- **Profile Management**: User avatars with Font Awesome icons and status indicators
+- **Enhanced Login Experience**: Theme toggle in login modal with improved dark mode readability
 
 ### Advanced Features
 - **Markdown Rendering**: AI responses support headings, lists, code blocks, and formatting
 - **Copy Messages**: Easy copying of AI responses to clipboard
-- **File Preview**: Selected files are displayed with remove options
+- **File Preview**: Selected files are displayed with improved spacing and remove options
+- **Auto-Close File List**: File attachment list automatically closes when submitting messages
+- **Enhanced PDF Processing**: Robust PDF text extraction with error handling and fallback messages
 - **Session Management**: Persistent user sessions with local storage
-- **Error Handling**: Graceful error messages and loading states
+- **Error Handling**: Graceful error messages and loading states for all operations
 - **Toast Notifications**: Non-intrusive feedback for user actions
+- **Layout Stability**: Optimized rendering to prevent layout shifts during dynamic content changes
+- **Message Editing**: Edit sent messages with automatic AI response regeneration
+
+## Recent Updates
+
+### Version Enhancements
+- **Font Awesome Avatars**: Replaced emoji avatars with scalable Font Awesome icons
+- **Login Modal Theme Toggle**: Added theme switching capability in the login screen
+- **Enhanced Dark Mode**: Improved readability and visual effects in dark theme
+- **Auto-Close File List**: File attachment preview automatically closes on message submission
+- **Improved PDF Processing**: Better error handling and text extraction for PDF files
+- **Layout Stability**: Optimized rendering to prevent content shifts during dynamic updates
+- **Enhanced File UI**: Better spacing and visual design for file attachment previews
 
 ## Requirements
 
@@ -119,9 +147,9 @@ pm2 start index.js --name "gemini-chatbot"
 ## Usage
 
 ### First Time Setup
-1. **Login**: Enter your name and select an avatar
-2. **Start Chatting**: Type a message or attach files
-3. **Theme Toggle**: Use the sun/moon button in the header to switch themes
+1. **Login**: Enter your name, select a Font Awesome avatar icon, and choose your preferred theme
+2. **Start Chatting**: Type a message or attach files (PDFs are automatically processed for text extraction)
+3. **Theme Toggle**: Use the theme button in the login modal or header to switch between light/dark themes
 
 ### Chat Features
 - **Send Messages**: Type and press Enter or click the send button
@@ -131,9 +159,11 @@ pm2 start index.js --name "gemini-chatbot"
 
 ### File Attachments
 - Click the attachment button to open file picker
-- Select multiple files of supported types
-- Preview selected files with remove options
-- Files are processed and included in AI context
+- Select multiple files of supported types (PDF text extraction included)
+- Preview selected files with improved spacing and remove options
+- File list automatically closes when submitting messages
+- Enhanced PDF processing with error handling and fallback messages
+- Files are processed and included in AI context for intelligent responses
 
 ### Chat History Management
 - **View History**: All conversations are listed in the sidebar
@@ -191,8 +221,8 @@ gemini-chatbot-api/
 - `PORT`: Server port (default: 3000)
 
 ### File Upload Limits
-- Maximum file size: 50MB per file
-- Supported formats: PDF, text, images, audio, video, and other files
+- Maximum file size: 10MB per file (optimized for stability)
+- Supported formats: PDF (with text extraction), text, images, audio, video, and other files
 
 ## Troubleshooting
 

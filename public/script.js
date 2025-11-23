@@ -673,6 +673,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('welcome-screen').style.display = 'none';
     userInput.value = '';
 
+    // Auto-close file list when submitting with attachments
+    if (attachedFiles.length > 0) {
+      fileList.style.display = 'none';
+      showToast('Processing attachments...');
+    }
+
     const thinkingMessage = addMessageToChatbox('bot', '<i class="fas fa-brain thinking-icon"></i> Thinking<span class="dots"></span>');
 
     try {
