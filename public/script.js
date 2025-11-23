@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const userNameInput = document.getElementById('user-name-input');
   const avatarSelect = document.getElementById('avatar-select');
   const avatarUpload = document.getElementById('avatar-upload');
+  const loginThemeToggle = document.getElementById('login-theme-toggle-btn');
   const welcomeScreen = document.getElementById('welcome-screen');
   const main = document.querySelector('.main');
   toast.style.display = 'none'; // Ensure hidden on load
@@ -29,14 +30,15 @@ document.addEventListener('DOMContentLoaded', () => {
   let startTime = parseInt(localStorage.getItem('startTime')) || Date.now();
   localStorage.setItem('startTime', startTime);
 
+
   // Function to update user display
   function updateUserDisplay(user) {
     document.getElementById('user-name').textContent = user.name;
-    
+
     const profileIcon = document.querySelector('.profile-icon');
     profileIcon.innerHTML = ''; // Clear existing content
-    
-    // Check if avatar is an uploaded image (data URL) or emoji
+
+    // Check if avatar is an uploaded image (data URL) or Font Awesome icon
     if (user.avatar.startsWith('data:image/')) {
       // Create image element for uploaded avatar
       const img = document.createElement('img');
@@ -47,11 +49,16 @@ document.addEventListener('DOMContentLoaded', () => {
       img.style.borderRadius = '50%';
       img.style.objectFit = 'cover';
       profileIcon.appendChild(img);
+    } else if (user.avatar.startsWith('fas ') || user.avatar.startsWith('far ') || user.avatar.startsWith('fab ')) {
+      // Display Font Awesome icon
+      const icon = document.createElement('i');
+      icon.className = user.avatar;
+      profileIcon.appendChild(icon);
     } else {
-      // Display emoji avatar
+      // Fallback to emoji or text
       profileIcon.textContent = user.avatar;
     }
-    
+
     document.querySelector('.welcome-screen h2').textContent = `Welcome to Gemini AI Chatbot, ${user.name}!`;
   }
 
@@ -119,18 +126,32 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Theme - Using sessionStorage for session-persistent theme
-  const isDark = sessionStorage.getItem('theme') === 'dark';
+  // Default to dark theme if no preference is saved
+  const savedTheme = sessionStorage.getItem('theme');
+  const isDark = savedTheme === null ? true : savedTheme === 'dark';
+
   if (isDark) {
     document.body.classList.add('dark-mode');
     themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+    loginThemeToggle.innerHTML = '<i class="fas fa-sun"></i>';
   } else {
     themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+    loginThemeToggle.innerHTML = '<i class="fas fa-moon"></i>';
   }
 
   themeToggle.addEventListener('click', () => {
     document.body.classList.toggle('dark-mode');
     const isDark = document.body.classList.contains('dark-mode');
     themeToggle.innerHTML = isDark ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+    // Save theme preference to sessionStorage
+    sessionStorage.setItem('theme', isDark ? 'dark' : 'light');
+  });
+
+  // Login theme toggle
+  loginThemeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    loginThemeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
     // Save theme preference to sessionStorage
     sessionStorage.setItem('theme', isDark ? 'dark' : 'light');
   });
@@ -312,8 +333,11 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   const fileList = document.getElementById('file-list');
-  // hide on initial load if no attachments
-  if (!attachedFiles || attachedFiles.length === 0) fileList.style.display = 'none';
+  // hide on initial load if no attachments and no saved files
+  const hasSavedFiles = localStorage.getItem('attachedFilesData');
+  if ((!attachedFiles || attachedFiles.length === 0) && !hasSavedFiles) {
+    fileList.style.display = 'none';
+  }
 
   function updateFileList() {
     fileList.innerHTML = '';
@@ -324,40 +348,31 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       // ensure visible when files exist
       fileList.style.display = 'flex';
-      
-      // Add close button at top-right
+
+      // Create header section with close button
+      const headerDiv = document.createElement('div');
+      headerDiv.className = 'file-list-header';
+
       const closeBtn = document.createElement('button');
       closeBtn.type = 'button';
       closeBtn.className = 'close-file-list-btn';
       closeBtn.title = 'Close and clear all files';
       closeBtn.innerHTML = '<i class="fas fa-times"></i>';
-      closeBtn.style.position = 'absolute';
-      closeBtn.style.top = '8px';
-      closeBtn.style.right = '8px';
-      closeBtn.style.zIndex = '10';
-      closeBtn.style.backgroundColor = 'rgba(220, 53, 69, 0.8)';
-      closeBtn.style.color = 'white';
-      closeBtn.style.border = 'none';
-      closeBtn.style.borderRadius = '50%';
-      closeBtn.style.width = '24px';
-      closeBtn.style.height = '24px';
-      closeBtn.style.display = 'flex';
-      closeBtn.style.alignItems = 'center';
-      closeBtn.style.justifyContent = 'center';
-      closeBtn.style.cursor = 'pointer';
-      closeBtn.style.fontSize = '0.8rem';
-      closeBtn.style.backdropFilter = 'blur(5px)';
-      closeBtn.style.transition = 'all 0.2s ease';
-      
+
       closeBtn.addEventListener('click', (ev) => {
         ev.stopPropagation();
         attachedFiles = [];
         fileInput.value = '';
         updateFileList();
+        localStorage.removeItem('attachedFilesData'); // Clear saved file data
         showToast('All file attachments cleared');
       });
-      
-      fileList.appendChild(closeBtn);
+
+      headerDiv.appendChild(closeBtn);
+
+      // Create content section for files
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'file-list-content';
       
       // Add hover effect for close button
       closeBtn.addEventListener('mouseenter', () => {
@@ -429,15 +444,43 @@ document.addEventListener('DOMContentLoaded', () => {
         wrapper.appendChild(controls);
 
         fileItem.appendChild(wrapper);
-        fileList.appendChild(fileItem);
+        contentDiv.appendChild(fileItem);
 
         // attach click handler to remove button
-        removeBtn.addEventListener('click', (ev) => {
+        removeBtn.addEventListener('click', async (ev) => {
           ev.stopPropagation();
           const idx = parseInt(removeBtn.dataset.index, 10);
           if (!isNaN(idx)) {
             attachedFiles.splice(idx, 1);
             updateFileList();
+            // Update saved file data
+            if (attachedFiles.length > 0) {
+              try {
+                const filesData = [];
+                for (const file of attachedFiles) {
+                  const reader = new FileReader();
+                  const dataPromise = new Promise((resolve) => {
+                    reader.onload = () => resolve(reader.result);
+                    reader.readAsDataURL(file);
+                  });
+                  const dataURL = await dataPromise;
+                  const base64Data = dataURL.split(',')[1];
+
+                  filesData.push({
+                    name: file.name,
+                    size: file.size,
+                    type: file.type,
+                    lastModified: file.lastModified,
+                    data: base64Data
+                  });
+                }
+                localStorage.setItem('attachedFilesData', JSON.stringify(filesData));
+              } catch (error) {
+                console.error('Error updating file data:', error);
+              }
+            } else {
+              localStorage.removeItem('attachedFilesData');
+            }
           }
         });
       });
@@ -445,8 +488,6 @@ document.addEventListener('DOMContentLoaded', () => {
       // Add 'Add more' control at the end
       const addMoreWrap = document.createElement('div');
       addMoreWrap.style.marginTop = '8px';
-      addMoreWrap.style.position = 'relative';
-      addMoreWrap.style.paddingRight = '32px'; // Space for close button
       const addMoreBtn = document.createElement('button');
       addMoreBtn.type = 'button';
       addMoreBtn.id = 'add-more-files';
@@ -455,25 +496,102 @@ document.addEventListener('DOMContentLoaded', () => {
       addMoreBtn.style.fontSize = '0.9rem';
       addMoreBtn.innerHTML = '<i class="fas fa-plus"></i> Add more';
       addMoreWrap.appendChild(addMoreBtn);
-      fileList.appendChild(addMoreWrap);
+      contentDiv.appendChild(addMoreWrap);
 
       addMoreBtn.addEventListener('click', (ev) => {
         ev.stopPropagation();
         fileInput.click();
       });
+
+      // Append both header and content to fileList
+      fileList.appendChild(headerDiv);
+      fileList.appendChild(contentDiv);
     }
   }
 
-  fileInput.addEventListener('change', (e) => {
+  // Load attached files from localStorage if available (after updateFileList is defined)
+  const savedFilesData = localStorage.getItem('attachedFilesData');
+  if (savedFilesData) {
+    try {
+      const filesData = JSON.parse(savedFilesData);
+      if (filesData.length > 0) {
+        // Recreate File objects from stored data
+        const recreatedFiles = filesData.map(fileData => {
+          // Convert base64 back to blob
+          const byteCharacters = atob(fileData.data);
+          const byteNumbers = new Array(byteCharacters.length);
+          for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          }
+          const byteArray = new Uint8Array(byteNumbers);
+          const blob = new Blob([byteArray], { type: fileData.type });
+
+          // Create File object
+          return new File([blob], fileData.name, {
+            type: fileData.type,
+            lastModified: fileData.lastModified
+          });
+        });
+
+        // Add recreated files to attachedFiles array
+        attachedFiles = recreatedFiles;
+        updateFileList();
+
+        // Ensure file-list is visible after restoration
+        const fileListElement = document.getElementById('file-list');
+        if (fileListElement && recreatedFiles.length > 0) {
+          fileListElement.style.display = 'flex';
+        }
+
+        showToast(`Restored ${recreatedFiles.length} previously selected file(s).`);
+        // Keep the data in localStorage for future refreshes
+      }
+    } catch (e) {
+      console.error('Error restoring files:', e);
+      localStorage.removeItem('attachedFilesData'); // Clear corrupted data
+    }
+  }
+
+  fileInput.addEventListener('change', async (e) => {
     const newFiles = Array.from(e.target.files);
     // Append new files, avoiding duplicates by name+size
-    newFiles.forEach(f => {
+    for (const f of newFiles) {
       const exists = attachedFiles.some(af => af.name === f.name && af.size === f.size && af.lastModified === f.lastModified);
       if (!exists) attachedFiles.push(f);
-    });
+    }
     updateFileList();
     // clear input so same file can be reselected later
     fileInput.value = '';
+
+    // Save file data to localStorage for persistence across refreshes
+    if (attachedFiles.length > 0) {
+      try {
+        const filesData = [];
+        for (const file of attachedFiles) {
+          const reader = new FileReader();
+          const dataPromise = new Promise((resolve) => {
+            reader.onload = () => resolve(reader.result);
+            reader.readAsDataURL(file);
+          });
+          const dataURL = await dataPromise;
+          // Extract base64 data (remove the data:mime;base64, prefix)
+          const base64Data = dataURL.split(',')[1];
+
+          filesData.push({
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            lastModified: file.lastModified,
+            data: base64Data
+          });
+        }
+        localStorage.setItem('attachedFilesData', JSON.stringify(filesData));
+      } catch (error) {
+        console.error('Error saving file data:', error);
+      }
+    } else {
+      localStorage.removeItem('attachedFilesData');
+    }
   });
 
   fileList.addEventListener('click', (e) => {
@@ -571,6 +689,7 @@ document.addEventListener('DOMContentLoaded', () => {
       attachedFiles = [];
       fileInput.value = '';
       updateFileList();
+      localStorage.removeItem('attachedFilesData'); // Clear saved file data after submission
       chatBox.scrollTop = chatBox.scrollHeight;
       localStorage.setItem('chats', JSON.stringify(chats));
     }
@@ -650,7 +769,7 @@ document.addEventListener('DOMContentLoaded', () => {
       avatar.classList.add(`${sender}-avatar`);
       if (sender === 'user') {
         const user = JSON.parse(sessionStorage.getItem('user'));
-        const userAvatar = user ? user.avatar : '👤';
+        const userAvatar = user ? user.avatar : 'fas fa-user';
         
         if (userAvatar.startsWith('data:image/')) {
           // Create image element for uploaded avatar
@@ -662,8 +781,13 @@ document.addEventListener('DOMContentLoaded', () => {
           img.style.borderRadius = '50%';
           img.style.objectFit = 'cover';
           avatar.appendChild(img);
+        } else if (userAvatar.startsWith('fas ') || userAvatar.startsWith('far ') || userAvatar.startsWith('fab ')) {
+          // Display Font Awesome icon
+          const icon = document.createElement('i');
+          icon.className = userAvatar;
+          avatar.appendChild(icon);
         } else {
-          // Display emoji avatar
+          // Fallback to emoji or text
           avatar.textContent = userAvatar;
         }
       } else {
@@ -709,7 +833,9 @@ document.addEventListener('DOMContentLoaded', () => {
           editButton.appendChild(editIcon);
           editButton.title = 'Edit Message';
           editButton.addEventListener('click', () => {
-            startEditMessage(messageElement, message, timestamp, container);
+            // Get the raw message text from chat data instead of formatted DOM content
+            const rawMessage = getRawMessageText(timestamp);
+            startEditMessage(messageElement, rawMessage, timestamp, container);
           });
           messageElement.appendChild(editButton);
         }
@@ -726,6 +852,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const elapsed = Date.now() - startTime;
     const minutes = Math.floor(elapsed / 60000);
     document.getElementById('online-time').textContent = `${minutes} min`;
+  }
+
+  // Function to get raw message text from chat data
+  function getRawMessageText(timestamp) {
+    if (currentChatId && chats[currentChatId]) {
+      const messageData = chats[currentChatId].messages.find(msg => msg.timestamp === timestamp);
+      return messageData ? messageData.text : '';
+    }
+    return '';
   }
 
   // Function to start editing a message
@@ -783,14 +918,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Update chat history
         updateChatHistory(messageTimestamp, newMessage);
-        
-        // Remove edit UI
-        messageElement.removeChild(editInput);
-        messageElement.removeChild(editButtons);
-        
+
         showToast('Message updated! Processing new response...');
-        
+
         // Process the edited message for new AI response
+        // Note: The chat will be cleared and reloaded, so edit UI cleanup is not needed
         processEditedMessage(newMessage, messageTimestamp);
       } else if (newMessage === originalMessage) {
         // No changes made, just cancel
@@ -856,23 +988,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Function to process edited message for new AI response
   async function processEditedMessage(editedMessage, messageTimestamp) {
+    console.log('Processing edited message:', editedMessage, 'timestamp:', messageTimestamp);
+
     try {
       // Find the index of the edited message
       const editedIndex = chats[currentChatId].messages.findIndex(msg => msg.timestamp === messageTimestamp);
+      console.log('Edited message index:', editedIndex);
 
-      if (editedIndex === -1) return; // Should not happen
-
-      // Filter messages to remove bot responses after the edited message
-      const filteredMessages = [];
-      for (let i = 0; i < chats[currentChatId].messages.length; i++) {
-        if (i <= editedIndex || chats[currentChatId].messages[i].sender !== 'bot') {
-          filteredMessages.push(chats[currentChatId].messages[i]);
-        }
+      if (editedIndex === -1) {
+        console.error('Edited message not found in chat data');
+        return;
       }
 
-      // Clear chat display and reload filtered messages
+      // Create a new conversation that includes all messages up to and including the edited message
+      const newMessages = [];
+      for (let i = 0; i <= editedIndex; i++) {
+        newMessages.push(chats[currentChatId].messages[i]);
+      }
+
+      console.log('New messages for API:', newMessages);
+
+      // Clear chat display and reload messages up to the edited message
       chatBox.innerHTML = '';
-      filteredMessages.forEach(msg => {
+      newMessages.forEach(msg => {
         const messageContainer = addMessageToChatbox(msg.sender, msg.text, msg.timestamp);
 
         // Mark edited messages
@@ -901,38 +1039,45 @@ document.addEventListener('DOMContentLoaded', () => {
       attachedFiles = [];
       fileInput.value = '';
       updateFileList();
+      localStorage.removeItem('attachedFilesData'); // Clear saved file data
 
-      // Prepare form data for API request with the filtered conversation
+      // Prepare form data for API request with the conversation up to the edited message
       const formData = new FormData();
-      formData.append('conversation', JSON.stringify(filteredMessages));
+      formData.append('conversation', JSON.stringify(newMessages));
+      console.log('Sending conversation to API:', JSON.stringify(newMessages));
 
       const response = await fetch('/api/chat', {
         method: 'POST',
         body: formData,
       });
 
+      console.log('API response status:', response.status);
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
+      console.log('API response data:', data);
       thinkingMessage.remove();
 
       if (data.result) {
         const msgTime = Date.now();
         addMessageToChatbox('bot', data.result, msgTime);
-        // Update the messages array: keep filtered + new bot response
-        chats[currentChatId].messages = [...filteredMessages, { sender: 'bot', text: data.result, timestamp: msgTime }];
+        // Update the messages array: replace everything after edited message with new bot response
+        chats[currentChatId].messages = [...newMessages, { sender: 'bot', text: data.result, timestamp: msgTime }];
         chats[currentChatId].timestamp = msgTime;
         localStorage.setItem('chats', JSON.stringify(chats));
         showToast('New response generated for edited message!');
+        console.log('Successfully processed edited message');
       } else {
+        console.warn('No result in API response');
         addMessageToChatbox('bot', 'Sorry, no response received from the AI.');
       }
 
     } catch (error) {
-      addMessageToChatbox('bot', `Error processing edited message: ${error.message || 'Failed to get response from server.'}`);
       console.error('Error processing edited message:', error);
+      addMessageToChatbox('bot', `Error processing edited message: ${error.message || 'Failed to get response from server.'}`);
       showToast('Failed to process edited message');
     }
   }

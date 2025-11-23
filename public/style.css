@@ -30,11 +30,12 @@ body {
   position: relative;
   height: 100vh;
   backdrop-filter: blur(20px) saturate(180%);
-  box-shadow: 
+  box-shadow:
     4px 0 20px rgba(0, 0, 0, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.4),
     inset 0 -1px 0 rgba(255, 255, 255, 0.1);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0; /* Prevent sidebar from shrinking */
 }
 
 .sidebar:hover {
@@ -128,18 +129,19 @@ body {
    cursor: pointer;
    border-radius: 12px; /* Fully rounded like buttons */
    margin-bottom: 12px;
-   background: rgba(255, 255, 255, 0.8);
-   border: 1px solid rgba(255, 255, 255, 0.3);
+   background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(248, 249, 250, 0.8) 50%, rgba(241, 243, 244, 0.75) 100%);
+   border: 1px solid rgba(255, 255, 255, 0.4);
    border-left: none; /* Remove left border for cleaner look */
    border-right: none; /* Remove right border for cleaner look */
    display: flex;
    align-items: center;
    position: relative; /* Needed for absolute positioning of buttons */
-   backdrop-filter: blur(15px) saturate(180%);
+   backdrop-filter: blur(20px) saturate(180%);
    box-shadow:
-     0 4px 16px rgba(0, 0, 0, 0.08),
-     0 1px 0 rgba(255, 255, 255, 0.4),
-     inset 0 1px 0 rgba(255, 255, 255, 0.2);
+     0 6px 20px rgba(0, 0, 0, 0.1),
+     0 2px 8px rgba(0, 0, 0, 0.06),
+     0 1px 0 rgba(255, 255, 255, 0.5),
+     inset 0 1px 0 rgba(255, 255, 255, 0.3);
    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
    overflow: hidden;
 }
@@ -155,21 +157,23 @@ body {
 }
 
 .history-item:hover {
-  background: rgba(255, 255, 255, 0.95);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 249, 250, 0.9) 50%, rgba(241, 243, 244, 0.85) 100%);
   transform: translateY(-2px);
-  box-shadow: 
-    0 8px 25px rgba(0, 0, 0, 0.15),
-    0 2px 0 rgba(255, 255, 255, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  border-color: rgba(0, 123, 255, 0.2);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.1),
+    0 2px 0 rgba(255, 255, 255, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  border-color: rgba(0, 123, 255, 0.3);
 }
 
 .history-item.active {
-   background: rgba(0, 123, 255, 0.15);
+   background: linear-gradient(135deg, rgba(0, 123, 255, 0.15) 0%, rgba(0, 86, 179, 0.2) 100%);
    border-color: #007bff;
    border-radius: 12px;
    box-shadow:
      0 4px 16px rgba(0, 123, 255, 0.3),
+     0 0 15px rgba(0, 123, 255, 0.1),
      inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
@@ -296,25 +300,33 @@ body {
   display: flex;
   flex-direction: column;
   margin: 0;
+  min-height: 0; /* Allow proper flex shrinking */
+  contain: layout; /* Isolate layout changes */
 }
 
 /* Enhanced Main Chat Container with Glass Morphism */
 .container {
-   width: 100%;
-   height: 100%;
-   background: rgba(255, 255, 255, 0.85);
-   display: flex;
-   flex-direction: column;
-   overflow: hidden;
-   position: relative;
-   backdrop-filter: blur(20px) saturate(180%);
-   border-radius: 20px 20px 0 0; /* Only top corners rounded */
-   border: 1px solid rgba(255, 255, 255, 0.3);
-   border-bottom: none; /* Remove bottom border for cleaner look */
-   box-shadow:
-     0 8px 30px rgba(0, 0, 0, 0.15),
-     inset 0 1px 0 rgba(255, 255, 255, 0.4);
-   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.85);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    backdrop-filter: blur(20px) saturate(180%);
+    border-radius: 20px 20px 0 0; /* Only top corners rounded */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-bottom: none; /* Remove bottom border for cleaner look */
+    box-shadow:
+      0 8px 30px rgba(0, 0, 0, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 400px; /* Ensure minimum height to prevent excessive shrinking */
+}
+
+/* Prevent layout shifts by ensuring consistent scrollbar space */
+.container {
+    scrollbar-gutter: stable;
 }
 
 .container::before {
@@ -473,6 +485,12 @@ body {
   gap: 16px;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  scrollbar-gutter: stable; /* Prevent layout shifts when scrollbar appears/disappears */
+  min-height: 200px; /* Prevent excessive shrinking during content transitions */
+  height: 100%; /* Take full available height */
+  box-sizing: border-box; /* Include padding in height calculations */
+  contain: layout style; /* Isolate layout changes to prevent affecting parent elements */
+  will-change: contents; /* Optimize for content changes */
 }
 
 .chat-box::-webkit-scrollbar {
@@ -613,14 +631,15 @@ body {
 }
 
 .dark-mode .history-item {
-  background: rgba(35, 35, 45, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(135deg, rgba(35, 35, 45, 0.85) 0%, rgba(45, 45, 55, 0.8) 50%, rgba(30, 30, 40, 0.75) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   color: #fff;
-  box-shadow: 
-    0 4px 16px rgba(0, 0, 0, 0.3),
-    0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(15px) saturate(180%);
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.4),
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px) saturate(180%);
 }
 
 .dark-mode .history-item::before {
@@ -628,28 +647,24 @@ body {
 }
 
 .dark-mode .history-item:hover {
-   background: rgba(45, 45, 55, 0.95);
+   background: linear-gradient(135deg, rgba(45, 45, 55, 0.95) 0%, rgba(55, 55, 65, 0.9) 50%, rgba(40, 40, 50, 0.85) 100%);
    transform: translateY(-2px);
    box-shadow:
-     0 8px 25px rgba(0, 0, 0, 0.4),
-     0 2px 0 rgba(255, 255, 255, 0.15),
-     inset 0 1px 0 rgba(255, 255, 255, 0.1);
-   border-color: rgba(0, 123, 255, 0.3);
+     0 10px 30px rgba(0, 0, 0, 0.5),
+     0 4px 12px rgba(0, 0, 0, 0.3),
+     0 2px 0 rgba(255, 255, 255, 0.2),
+     inset 0 1px 0 rgba(255, 255, 255, 0.12);
+   border-color: rgba(0, 123, 255, 0.4);
 }
 
 .dark-mode .history-item.active {
-   background: rgba(0, 123, 255, 0.15);
-   border-color: rgba(0, 123, 255, 0.5);
-   border-radius: 12px;
-   box-shadow:
-     0 4px 16px rgba(0, 123, 255, 0.3),
-     inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-.dark-mode .history-item.active {
-   background-color: #1e3a5f;
-   border-color: #007bff;
-   border-radius: 12px;
+    background: linear-gradient(135deg, rgba(0, 123, 255, 0.2) 0%, rgba(0, 86, 179, 0.25) 100%);
+    border-color: #007bff;
+    border-radius: 12px;
+    box-shadow:
+      0 4px 16px rgba(0, 123, 255, 0.4),
+      0 0 20px rgba(0, 123, 255, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .dark-mode .history-item:hover {
@@ -806,30 +821,45 @@ body {
 }
 
 .dark-mode .message-edit-input {
-  background-color: rgba(42, 42, 42, 0.9);
-  border-color: #007bff;
+  background: rgba(42, 42, 42, 0.95);
+  border-color: rgba(0, 123, 255, 0.5);
   color: #fff;
+  box-shadow:
+    inset 0 2px 8px rgba(0, 0, 0, 0.3),
+    0 2px 12px rgba(0, 123, 255, 0.2);
 }
 
 .dark-mode .message-edit-input:focus {
-  border-color: #0056b3;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+  border-color: #007bff;
+  background: rgba(55, 55, 55, 0.98);
+  box-shadow:
+    inset 0 2px 8px rgba(0, 0, 0, 0.3),
+    0 0 0 4px rgba(0, 123, 255, 0.3),
+    0 4px 16px rgba(0, 123, 255, 0.3);
+}
+
+.dark-mode .edit-buttons {
+  border-top-color: rgba(255, 255, 255, 0.1);
 }
 
 .dark-mode .edit-save-btn {
-  background-color: #28a745;
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.4);
 }
 
 .dark-mode .edit-save-btn:hover {
-  background-color: #218838;
+  background: linear-gradient(135deg, #218838 0%, #17a2b8 100%);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.5);
 }
 
 .dark-mode .edit-cancel-btn {
-  background-color: #6c757d;
+  background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+  box-shadow: 0 2px 8px rgba(108, 117, 125, 0.4);
 }
 
 .dark-mode .edit-cancel-btn:hover {
-  background-color: #5a6268;
+  background: linear-gradient(135deg, #5a6268 0%, #495057 100%);
+  box-shadow: 0 4px 12px rgba(108, 117, 125, 0.5);
 }
 
 .dark-mode #chat-form {
@@ -886,6 +916,21 @@ body {
 
 .dark-mode #file-list {
   background-color: rgba(42, 42, 42, 0.9) !important;
+}
+
+.dark-mode .file-list-header {
+  background: linear-gradient(135deg, rgba(35, 35, 45, 0.95) 0%, rgba(45, 45, 55, 0.9) 100%);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.dark-mode .file-list-content {
+  background: linear-gradient(135deg, rgba(35, 35, 45, 0.85) 0%, rgba(45, 45, 55, 0.8) 50%, rgba(30, 30, 40, 0.75) 100%);
+}
+
+.dark-mode .file-item {
+  background-color: rgba(55, 55, 65, 0.8);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .dark-mode .profile-icon {
@@ -972,13 +1017,46 @@ body {
 }
 
 .dark-mode .login-screen {
-  background: rgba(0, 0, 0, 0.9);
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(20, 20, 30, 0.95) 50%, rgba(0, 0, 0, 0.9) 100%);
+  background-size: 400% 400%;
+  animation: loginDarkGradient 15s ease infinite;
+}
+
+@keyframes loginDarkGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .dark-mode .login-container {
-  background: rgba(45, 45, 45, 0.95);
+  background: linear-gradient(135deg, rgba(45, 45, 45, 0.95) 0%, rgba(30, 30, 40, 0.98) 50%, rgba(45, 45, 45, 0.95) 100%);
+  background-size: 200% 200%;
+  animation: loginContainerDark 8s ease infinite;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(0, 123, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px) saturate(180%);
+}
+
+@keyframes loginContainerDark {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.dark-mode .login-theme-toggle-btn {
+  background: rgba(55, 55, 65, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ccc;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .login-theme-toggle-btn:hover {
+  background: rgba(65, 65, 75, 0.9);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .login-container {
@@ -992,6 +1070,35 @@ body {
   animation: slideIn 0.5s ease-in-out 0.2s both;
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+}
+
+.login-theme-toggle-btn {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #666;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 12px;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.login-theme-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  color: #333;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .login-icon {
@@ -1059,6 +1166,31 @@ body {
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+.dark-mode .form-group label {
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.dark-mode .login-container h2 {
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.dark-mode .login-icon {
+  color: #007bff;
+  text-shadow: 0 0 20px rgba(0, 123, 255, 0.3);
+}
+
+.dark-mode .login-container button {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+
+.dark-mode .login-container button:hover {
+  background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+  box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+}
+
 .form-group input::placeholder {
   color: #adb5bd;
 }
@@ -1095,21 +1227,22 @@ body {
 
 /* Welcome Screen */
 .welcome-screen {
-   display: none;
-   position: absolute;
-   top: 0;
-   left: 0;
-   right: 0;
-   bottom: 80px; /* Leave more space for the form */
-   flex-direction: column;
-   align-items: center;
-   justify-content: center;
-   text-align: center;
-   color: #666;
-   z-index: 1;
-   background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.1) 100%);
-   backdrop-filter: blur(10px) saturate(180%);
-   border-radius: 20px 20px 0 0;
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 80px; /* Leave more space for the form */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #666;
+    z-index: 1;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.1) 100%);
+    backdrop-filter: blur(10px) saturate(180%);
+    border-radius: 20px 20px 0 0;
+    transition: opacity 0.3s ease; /* Smooth fade transition instead of display toggle */
 }
 
 .welcome-icon {
@@ -1394,17 +1527,28 @@ body {
 /* Enhanced Chat Input Form with Glass Morphism */
 #chat-form {
   display: flex;
+  flex-direction: column;
   align-items: center;
   padding: 20px;
   border-top: 1px solid rgba(255, 255, 255, 0.2);
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(20px) saturate(180%);
   position: relative;
-  box-shadow: 
+  z-index: 10;
+  box-shadow:
     0 -8px 32px rgba(0, 0, 0, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.4);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 0 0 20px 20px; /* Only bottom corners rounded */
+}
+
+.form-controls {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 15;
 }
 
 #user-input {
@@ -1470,23 +1614,63 @@ body {
 }
 
 #file-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 10px;
-  padding-top: 35px; /* Space for close button */
   background-color: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(5px);
   border-radius: 8px;
   margin-bottom: 10px;
   position: relative;
+  min-height: 60px; /* Prevent layout shifts when appearing/disappearing */
+  max-height: 200px; /* Limit height to prevent cutting off other content */
+  transition: all 0.3s ease; /* Smooth appearance/disappearance */
+  transform-origin: top; /* Smooth scaling from top */
+  display: flex;
+  flex-direction: column;
+}
+
+#file-list .file-list-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: inherit;
+  backdrop-filter: inherit;
+  border-radius: 8px 8px 0 0;
+  padding: 8px 10px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+#file-list .file-list-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  min-height: 0; /* Allow flex shrinking */
 }
 
 .close-file-list-btn {
-  position: absolute !important;
-  top: 8px !important;
-  right: 8px !important;
-  z-index: 20 !important;
+  background: rgba(220, 53, 69, 0.8);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.8rem;
+  backdrop-filter: blur(5px);
+  transition: all 0.2s ease;
+  margin-left: 8px;
+}
+
+.close-file-list-btn:hover {
+  background-color: rgba(220, 53, 69, 1);
+  transform: scale(1.1);
 }
 
 .close-file-list-btn:hover {
@@ -1764,66 +1948,90 @@ body {
 /* Message edit input */
 .message-edit-input {
   width: 100%;
-  min-height: 60px;
-  max-height: 200px;
-  padding: 8px;
-  border: 2px solid #007bff;
-  border-radius: 8px;
-  font-size: 0.9rem;
+  min-height: 80px;
+  max-height: 250px;
+  padding: 12px 16px;
+  border: 2px solid rgba(0, 123, 255, 0.4);
+  border-radius: 16px;
+  font-size: 0.95rem;
   font-family: inherit;
+  line-height: 1.4;
   resize: vertical;
   outline: none;
-  background-color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 8px;
-  backdrop-filter: blur(5px);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px) saturate(180%);
+  box-shadow:
+    inset 0 2px 8px rgba(0, 0, 0, 0.08),
+    0 2px 12px rgba(0, 123, 255, 0.15);
+  margin-bottom: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #333;
 }
 
 .message-edit-input:focus {
-  border-color: #0056b3;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  border-color: #007bff;
+  box-shadow:
+    inset 0 2px 8px rgba(0, 0, 0, 0.08),
+    0 0 0 4px rgba(0, 123, 255, 0.2),
+    0 4px 16px rgba(0, 123, 255, 0.25);
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-1px);
 }
 
 /* Edit buttons container */
 .edit-buttons {
   display: flex;
-  gap: 8px;
-  margin-top: 8px;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .edit-save-btn {
-  background-color: #28a745;
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
   color: white;
   border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
+  padding: 8px 16px;
+  border-radius: 20px;
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
+  font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 4px;
-  transition: background-color 0.2s;
+  gap: 6px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+  backdrop-filter: blur(5px);
 }
 
 .edit-save-btn:hover {
-  background-color: #218838;
+  background: linear-gradient(135deg, #218838 0%, #17a2b8 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
 }
 
 .edit-cancel-btn {
-  background-color: #6c757d;
+  background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
   color: white;
   border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
+  padding: 8px 16px;
+  border-radius: 20px;
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
+  font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 4px;
-  transition: background-color 0.2s;
+  gap: 6px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
+  backdrop-filter: blur(5px);
 }
 
 .edit-cancel-btn:hover {
-  background-color: #5a6268;
+  background: linear-gradient(135deg, #5a6268 0%, #495057 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(108, 117, 125, 0.4);
 }
 
 .btn-icon {
@@ -1923,32 +2131,18 @@ body {
 }
 
 .form-copyright {
-   /* keep it visually centered over the form controls */
-   position: absolute;
-   left: 50%;
-   top: 50%;
-   transform: translate(-50%, -50%);
-   z-index: 5; /* ensure it sits above the input & buttons */
-   pointer-events: none; /* avoid blocking clicks on inputs/buttons */
-   font-size: 0.7rem;
-   color: #666;
-   font-weight: 500;
-   font-style: italic;
-   white-space: nowrap;
-   text-align: center;
-   background: rgba(255, 255, 255, 0.8);
-   backdrop-filter: blur(10px) saturate(180%);
-   padding: 4px 8px;
-   border-radius: 12px;
-   border: 1px solid rgba(255, 255, 255, 0.3);
-   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    /* Position at the bottom of the chat form */
+    margin-top: 2px;
+    text-align: center;
+    font-size: 0.7rem;
+    color: #666;
+    font-weight: 500;
+    font-style: italic;
+    white-space: nowrap;
 }
 
 .dark-mode .form-copyright {
-   color: #aaa;
-   background: rgba(42, 42, 42, 0.8);
-   border: 1px solid rgba(255, 255, 255, 0.1);
-   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    color: #aaa;
 }
 
 .attachment {

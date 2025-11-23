@@ -32,6 +32,7 @@
   <!-- Login Screen -->
   <div id="login-screen" class="login-screen">
     <div class="login-container">
+      <button id="login-theme-toggle-btn" class="login-theme-toggle-btn" title="Toggle Theme"><i class="fas fa-moon"></i></button>
       <div class="login-icon"><i class="fas fa-user"></i></div>
       <h2>Welcome to Gemini AI Chatbot</h2>
       <form id="login-form">
@@ -42,10 +43,10 @@
         <div class="form-group">
           <label for="avatar-select">Choose avatar:</label>
           <select id="avatar-select">
-            <option value="👤">👤 Default</option>
-            <option value="😊">😊 Smile</option>
-            <option value="🤓">🤓 Nerd</option>
-            <option value="🧑">🧑 Person</option>
+            <option value="fas fa-user">👤 Default</option>
+            <option value="fas fa-smile">😊 Smile</option>
+            <option value="fas fa-glasses">🤓 Nerd</option>
+            <option value="fas fa-user-tie">🧑 Person</option>
           </select>
           <label>Or upload your own:</label>
           <input type="file" id="avatar-upload" accept="image/*">
@@ -79,14 +80,16 @@
       <div id="chat-box" class="chat-box"></div>
       <div id="file-list"></div>
       <form id="chat-form">
-        <input type="file" id="file-input" multiple style="display: none;" />
-        <button type="button" id="add-file-btn" class="add-file-btn"><i class="fas fa-paperclip"></i></button>
-        <input type="text" id="user-input" placeholder="Type your message..." autocomplete="off" required autofocus />
-        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+        <div class="form-controls">
+          <input type="file" id="file-input" multiple style="display: none;" />
+          <button type="button" id="add-file-btn" class="add-file-btn"><i class="fas fa-paperclip"></i></button>
+          <input type="text" id="user-input" placeholder="Type your message..." autocomplete="off" required autofocus />
+          <button type="submit"><i class="fas fa-paper-plane"></i></button>
+        </div>
+        <div class="form-copyright">
+          <p>&copy; 2025 Bastomi Adi Nugroho</p>
+        </div>
       </form>
-    </div>
-    <div class="main-footer">
-      <p>&copy; 2025 Bastomi Adi Nugroho</p>
     </div>
   </div>
 
